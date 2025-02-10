@@ -1,0 +1,45 @@
+# Ignore environment configuration
+.env
+
+# Ignore vendor dependencies (should be installed via Composer)
+vendor/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE/editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Ignore logs and cache
+logs/
+*.log
+cache/
+
+# Ignore composer lock file if you want fresh installs each time
+# composer.lock
+
+# Ignore database dumps (if any)
+*.sql
+*.sqlite
+*.db
+
+# Ignore deployment-related files
+node_modules/
+npm-debug.log
+yarn.lock
+build/
+dist/
+
+# Ignore PHPStorm metadata
+.phpstorm.meta.php
+
+# Ignore compiled assets (if applicable)
+public/assets/
+public/build/
+
+# Ignore any local dev configurations
+*.local
