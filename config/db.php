@@ -20,7 +20,7 @@ class Database {
         $this->host = $_ENV['DB_HOST'];
         $this->db = $_ENV['DB_NAME'];
         $this->user = $_ENV['DB_USER'];
-        $this->password = $_ENV['DB_PASSWORD'];
+        $this->password = $_ENV['DB_PASS'];
         $this->charset = 'utf8mb4';
 
         // Set up the PDO connection

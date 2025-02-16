@@ -1,6 +1,6 @@
 <?php
 require 'vendor/autoload.php'; // Load Composer autoloader
-require '/var/www/html/clermont/config/db.php';
+require '/var/www/html/clermont/config/db.php'; // Assuming this file creates the PDO instance
 
 use Dotenv\Dotenv;
 use MongoDB\Client;
@@ -8,8 +8,10 @@ use MongoDB\Driver\ServerApi;
 use MongoDB\BSON\UTCDateTime;
 
 function formatData(){
-    global $pdo;
-    // Load environment variables from .env file
+    global $pdo; // Use the existing PDO connection from db.php
+    $error = null;
+
+    // Load environment variables from .env file (if not already loaded in db.php)
     $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
     $dotenv->load();
 
@@ -36,12 +38,6 @@ function formatData(){
             ],
         ],
         [
-            // 'projection' => [
-            //     'MMSI' => 1,
-            //     'Longitude' => 1,
-            //     'Latitude' => 1,
-            //     'time_utc' => 1, // Include time_utc in the projection to verify the data
-            // ],
             'sort' => ['time_utc' => -1], // Sort by time_utc in descending order
             'limit' => 10, // Limit to the most recent 10 entries
         ]
@@ -50,15 +46,29 @@ function formatData(){
     // Convert the cursor to an array
     $dataArray = iterator_to_array($cursor);
 
-    // Iterate over the data and print it
+    // Iterate over the data and insert into MySQL
     foreach ($dataArray as $data) {
-        $sql = "SELECT * FROM ships";
+        $sql = "INSERT INTO ships (mmsi, ship_name, latitude, longitude) VALUES (:mmsi, :ship_name, :latitude, :longitude)";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        $ships = $stmt->fetchAll();
-        print_r($ships); // Replace this with your own ship data fetching logic
-        // print_r($data);
+        $stmt->bindParam(':mmsi', $data['MMSI']);
+        $stmt->bindParam(':ship_name', $data['ShipName']);
+        $stmt->bindParam(':latitude', $data['Latitude']);
+        $stmt->bindParam(':longitude', $data['Longitude']);
+
+        try {
+            $stmt->execute();
+        } catch (Exception $e) {
+            $error = $e->getMessage();
+        }
+
+        if(!$error){
+            echo "Inserted ". $stmt->rowCount(). " row(s).\n";
+        }else{
+            echo json_encode($error);
+        }
     }
+
+    unset($pdo);
 }
 
 formatData();
