@@ -20,11 +20,6 @@ $message = json_encode([
     "BoundingBoxes" => [
         [[42.32707815, -83.2032273643204], [42.18912815, -83.0412166356796]]
     ]
-
-    "APIKEY": "78f5a0948fea3d8a47a12468c755c64fe8636946",
-    "BoundingBoxes": [[[42.25750, -83.12222],[42.331429, -83.045753]]]
-//    "FiltersShipMMSI" => ["368207620", "367719770", "211476060"],
-//    "FilterMessageTypes" => ["PositionReport"]
 ]);
 
 // Send the message
