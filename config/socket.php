@@ -34,6 +34,7 @@ while (true) {
         // Receive a message from the WebSocket server
         $incomingMessage = $client->receive();
         echo "Received message: $incomingMessage\n";
+        file_put_contents('/var/www/html/clermont/data/data.json', json_encode($incomingMessage) . "\n", FILE_APPEND);
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }

@@ -46,3 +46,5 @@ public/build/
 
 # Ignore data
 data
+
+._*
