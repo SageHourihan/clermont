@@ -43,3 +43,6 @@ public/build/
 
 # Ignore any local dev configurations
 *.local
+
+# Ignore data
+data
