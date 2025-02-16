@@ -19,8 +19,7 @@ $message = json_encode([
    "APIKey" => $apiKey,  // API Key from environment
     "BoundingBoxes" => [
         [[42.32707815, -83.2032273643204], [42.18912815, -83.0412166356796]]
-    ],
-
+    ]
 //    "FiltersShipMMSI" => ["368207620", "367719770", "211476060"],
 //    "FilterMessageTypes" => ["PositionReport"]
 ]);
