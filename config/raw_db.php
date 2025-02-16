@@ -14,7 +14,7 @@ function writeData(){
 
     $file = '/var/www/html/clermont/data/data.json';
 
-    // mongodb connection URI
+    // MongoDB connection URI
     $uri = $_ENV['MONGODB_URI'];
 
     // Specify Stable API version 1
@@ -22,45 +22,40 @@ function writeData(){
 
     // Create a new client and connect to the server
     $client = new MongoDB\Client($uri, [], ['serverApi' => $apiVersion]);
-    $collection = $client->clermont->raw_data   ;
+    $collection = $client->clermont->raw_data;
 
     // Read the file line by line and decode each JSON object
     $lines = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     $jsonArray = array_map('json_decode', $lines);
 
-
     foreach ($jsonArray as $data) {
-        $data = json_decode($data,true);
+        $data = json_decode($data, true);
 
-        // Access values
-        $messageType = $data['MessageType'] ?? 'Unknown';
-        $mmsi = $data['MetaData']['MMSI'] ?? 'Unknown';
-        $shipName = trim($data['MetaData']['ShipName'] ?? 'Unknown');
-        $latitude = $data['Message']['PositionReport']['Latitude'] ?? null;
-        $longitude = $data['Message']['PositionReport']['Longitude'] ?? null;
-        $sog = $data['Message']['PositionReport']['Sog'] ?? null;
+        if (!is_array($data)) {
+            continue; // Skip invalid JSON
+        }
+
+        // Flatten the structure and store all key-value pairs dynamically
+        $document = [];
+
+        // Recursively process the JSON object to flatten it into a single-level associative array
+        array_walk_recursive($data, function($value, $key) use (&$document) {
+            $document[$key] = $value;
+        });
 
         try {
-            // Insert data into MongoDB
-            $insertOneResult = $collection->insertOne([
-                'messageType' => $messageType,
-                'mmsi' => $mmsi,
-                'shipName' => $shipName,
-                'latitude' => $latitude,
-                'longitude' => $longitude,
-                'sog' => $sog,
-            ]);
+            // Insert dynamically structured data into MongoDB
+            $insertOneResult = $collection->insertOne($document);
         } catch (Exception $e) {
             $error = $e->getMessage();
         }
 
-        if(!$error){
-            echo "Inserted %d document(s)\n", $insertOneResult->getInsertedCount();
-        }else {
-            echo(json_encode($error));
+        if (!$error) {
+            echo sprintf("Inserted %d document(s)\n", $insertOneResult->getInsertedCount());
+        } else {
+            echo json_encode($error);
         }
     }
 }
-
 
 writeData();
