@@ -10,6 +10,8 @@
     <h1>Live Ship Tracking</h1>
     <pre id="dataDisplay">Waiting for data...</pre>
 
+    <div id="response"></div>
+
     <script src="js/polling.js"></script>
 </body>
 </html>

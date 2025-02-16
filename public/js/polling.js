@@ -7,6 +7,7 @@ setInterval(function() {
         success: function(data) {
             // Update the UI with the latest data
             console.log(data); // You can replace this with code to update your HTML
+            $('#response').append(data);
         },
         error: function(error) {
             console.error('Error fetching data:', error);
