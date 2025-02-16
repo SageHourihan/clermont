@@ -17,10 +17,10 @@ $client = new Client("wss://stream.aisstream.io/v0/stream");
 // Prepare the message
 $message = json_encode([
    "APIKey" => $apiKey,  // API Key from environment
-   "BoundingBoxes" => [
-       [[25.835302, -80.207729], [25.602700, -79.879297]],
-       [[33.772292, -118.356139], [33.673490, -118.095731]]
-   ],
+    "BoundingBoxes" => [
+        [[42.32707815, -83.2032273643204], [42.18912815, -83.0412166356796]]
+    ],
+
 //    "FiltersShipMMSI" => ["368207620", "367719770", "211476060"],
 //    "FilterMessageTypes" => ["PositionReport"]
 ]);
