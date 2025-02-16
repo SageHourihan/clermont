@@ -4,6 +4,7 @@ require 'vendor/autoload.php'; // Load Composer autoloader
 use Dotenv\Dotenv;
 use MongoDB\Client;
 use MongoDB\Driver\ServerApi;
+use MongoDB\BSON\UTCDateTime;
 
 function writeData(){
     $error = null;
@@ -42,6 +43,9 @@ function writeData(){
         array_walk_recursive($data, function($value, $key) use (&$document) {
             $document[$key] = $value;
         });
+
+        // Add a created_at field with the current UTC timestamp
+        $document['created_at'] = new UTCDateTime(); // Current UTC time
 
         try {
             // Insert dynamically structured data into MongoDB
