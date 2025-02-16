@@ -45,6 +45,6 @@ public/build/
 *.local
 
 # Ignore data
-data
+data/*
 
 ._*
