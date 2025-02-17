@@ -7,3 +7,27 @@ html, body {
     height: 100%;
     width: 100%;
 }
+
+
+#coordinates {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 5px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+#weather-overlay {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    z-index: 1000;
+    font-family: Arial, sans-serif;
+}
+

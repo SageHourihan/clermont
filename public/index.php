@@ -14,6 +14,7 @@
     <!-- <pre id="dataDisplay">Waiting for data...</pre> -->
 
     <div id="map"></div>
+    <div id="coordinates"></div>
 
     <!-- <div id="response"></div> -->
     <script src="js/map.js"></script>
