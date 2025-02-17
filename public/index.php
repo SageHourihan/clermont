@@ -10,6 +10,17 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 <body>
+    
+    <div id="navbar">
+        <div class="brand">Clermont</div>
+        <div class="nav-items">
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+            <input type="text" placeholder="Search...">
+            <div class="profile"></div>
+        </div>
+    </div>
     <!-- <h1>Live Ship Tracking</h1> -->
     <!-- <pre id="dataDisplay">Waiting for data...</pre> -->
 

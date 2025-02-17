@@ -3,11 +3,63 @@ html, body {
     margin: 0;
 }
 
+
+/* Top navigation bar */
+#navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #123456; /* Clermont's primary color */
+    color: white;
+}
+
+#navbar .brand {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+/* Navigation items on the right */
+#navbar .nav-items {
+    display: flex;
+    align-items: center;
+}
+
+#navbar .nav-items a {
+    color: white;
+    text-decoration: none;
+    margin-left: 15px;
+    font-size: 16px;
+}
+
+#navbar .nav-items input[type="text"] {
+    padding: 5px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    margin-left: 20px; /* Add some space between Contact and Search bar */
+}
+
+#navbar .nav-items input[type="text"]:focus {
+    outline: none;
+    border: 2px solid #789abc; /* Secondary color */
+}
+
+#navbar .nav-items .profile {
+    width: 30px;
+    height: 30px;
+    background-color: #789abc; /* Secondary color */
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 15px;
+    background-image: url('path-to-profile-icon.png'); /* Profile icon */
+    background-size: cover;
+}
+
 #map {
     height: 100%;
     width: 100%;
 }
-
 
 #coordinates {
     position: fixed;
@@ -21,13 +73,12 @@ html, body {
 
 #weather-overlay {
     position: fixed;
-    top: 10px;
-    left: 10px;
+    top: 49px;
+    left: 50%;
+    transform: translateX(-50%);
     background: rgba(255, 255, 255, 0.7);
     padding: 10px;
     border-radius: 5px;
-    font-size: 14px;
     z-index: 1000;
-    font-family: Arial, sans-serif;
 }
 

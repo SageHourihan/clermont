@@ -33,7 +33,7 @@ function getWeatherData(lat, lng) {
 }
 
 // Create a weather overlay div at the top of the map and center it
-$('body').prepend('<div id="weather-overlay" style="position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.7); padding: 10px; border-radius: 5px; z-index: 1000;"></div>');
+$('body').prepend('<div id="weather-overlay"></div>');
 
 // jQuery to update the coordinates on mouse move
 $(document).ready(function() {
