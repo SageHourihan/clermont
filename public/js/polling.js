@@ -1,7 +1,7 @@
 // Set the polling interval (e.g., every 5 seconds)
 setInterval(function() {
     $.ajax({
-        url: '..//src/api/getData.php',  // Correct path to getData.php
+        url: '../src/api/getData.php',  // Correct path to getData.php
         type: 'GET',
         dataType: 'json',  // Expecting a JSON response
         success: function(data) {
