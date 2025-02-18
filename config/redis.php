@@ -1,5 +1,6 @@
 <?php
-require 'vendor/autoload.php'; // Load Composer autoloader
+require __DIR__ . '/../vendor/autoload.php'; // Adjust the path as necessary
+
 
 use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
@@ -13,10 +14,3 @@ $redisPassword = $_ENV['REDIS_PASSWORD'];
 $redis = new Redis();
 $redis->connect($redisHost, $redisPort);
 $redis->auth($redisPassword);
-
-// Test connection
-if ($redis->ping()) {
-    echo "Connected to Redis!\n";
-} else {
-    echo "Failed to connect.";
-}
