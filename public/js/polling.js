@@ -4,39 +4,62 @@ setInterval(function() {
         type: 'GET',
         dataType: 'json',  // Expecting a JSON response
         success: function(data) {
+            console.log('Full Response:', data);
+
             try {
-                // Log the full response to inspect its structure
-                console.log('Full Response:', data);
+                // Ensure that data is an array
+                if (Array.isArray(data) && data.length > 0) {
+                    let allShipData = [];
 
-                // Check if the response contains the necessary data
-                if (data && data.Message) {
-                    let shipData = {};
+                    data.forEach(ship => {
+                        let shipData = {};
 
-                    console.log('Processing message:', data.Message);
+                        console.log('Processing message:', ship.Message);
+                        if(ship.Message.AidsToNavigationReport || ship.Message.BaseStationReport){
+                            return;
+                        }
 
-                    // Check if PositionReport exists
-                    if (data.Message.PositionReport) {
-                        shipData.name = data.MetaData.ShipName || "Unknown Ship";
-                        shipData.latitude = data.Message.PositionReport.Latitude;
-                        shipData.longitude = data.Message.PositionReport.Longitude;
-                    }
+                        // Extract ship information from PositionReport if available
+                        if (ship.Message.PositionReport) {
+                            shipData.name = ship.MetaData.ShipName || "Unknown Ship";
+                            shipData.latitude = ship.Message.PositionReport.Latitude;
+                            shipData.longitude = ship.Message.PositionReport.Longitude;
+                            shipData.timestamp = ship.MetaData.time_utc;
+                            shipData.cog = ship.Message.PositionReport.Cog;
+                            shipData.sog = ship.Message.PositionReport.Sog;
 
-                    // If no PositionReport, check for ShipStaticData
-                    if ((!shipData.latitude || !shipData.longitude) && data.Message.ShipStaticData) {
-                        shipData.name = data.MetaData.ShipName || "Unknown Ship";
-                        shipData.latitude = data.Message.ShipStaticData.latitude;
-                        shipData.longitude = data.Message.ShipStaticData.longitude;
-                    }
+                            console.log(`PositionReport data for ${shipData.name}:`, shipData);
+                        }
 
-                    // Check if the ship data is valid
-                    if (shipData.latitude && shipData.longitude) {
-                        // Call plotShipData to display the ship
-                        plotShipData([shipData]);
+                        // If no PositionReport, check for ShipStaticData
+                        if ((!shipData.latitude || !shipData.longitude) && ship.Message.ShipStaticData) {
+                            shipData.name = ship.MetaData.ShipName || "Unknown Ship";
+                            shipData.latitude = ship.Message.ShipStaticData.latitude;
+                            shipData.longitude = ship.Message.ShipStaticData.longitude;
+                            shipData.timestamp = ship.MetaData.time_utc;
+
+                            console.log(`ShipStaticData for ${shipData.name}:`, shipData);
+                        }
+
+                        // Check if the ship data is valid
+                        if (shipData.latitude && shipData.longitude) {
+                            allShipData.push(shipData);  // Collect all valid ships
+                        } else {
+                            console.log(`No valid ship data found or invalid format for ${ship.MetaData.ShipName}`);
+                        }
+                    });
+
+                    // Log all the ship data that will be plotted
+                    console.log('All valid ship data:', allShipData);
+
+                    // If any valid ship data exists, plot it
+                    if (allShipData.length > 0) {
+                        plotShipData(allShipData);  // Assuming plotShipData accepts an array of ships
                     } else {
-                        console.log("No valid ship data found or invalid format");
+                        console.log("No valid ship data to plot.");
                     }
                 } else {
-                    console.log("Invalid response format or missing 'Message' key");
+                    console.log("Invalid response format or no data available.");
                 }
             } catch (error) {
                 console.error('Error parsing data:', error);

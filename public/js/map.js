@@ -62,7 +62,13 @@ $(document).ready(function() {
 // Function to plot ships on the map
 // Function to plot ships on the map
 function plotShipData(shipData) {
-    console.log(shipData);
+    console.log('Received ship data:', shipData);
+
+    // Ensure that shipData is an array and contains valid data
+    if (!Array.isArray(shipData) || shipData.length === 0) {
+        console.log('No valid ship data to plot.');
+        return;
+    }
 
     // Clear the existing markers
     markers.forEach(marker => map.removeLayer(marker));
@@ -73,31 +79,36 @@ function plotShipData(shipData) {
         const lat = ship.latitude;
         const lon = ship.longitude;
 
-        // Define a custom icon
-        var shipIcon = L.icon({
-            iconUrl: '/clermont/assets/cargo-ship.png',  // Path to your custom icon image
-            iconSize: [30, 30],  // Size of the icon
-            iconAnchor: [16, 32],  // Point of the icon that will correspond to the marker's location
-            popupAnchor: [0, -32]  // Offset for the popup (optional)
-        });
+        // Only plot ships that have valid latitude and longitude
+        if (lat && lon) {
+            // Define a custom icon
+            var shipIcon = L.icon({
+                iconUrl: '/clermont/assets/cargo-ship.png',  // Path to your custom icon image
+                iconSize: [30, 30],  // Size of the icon
+                iconAnchor: [16, 32],  // Point of the icon that will correspond to the marker's location
+                popupAnchor: [0, -32]  // Offset for the popup (optional)
+            });
 
-        // Use this icon in your marker
-        let marker = L.marker([lat, lon], { icon: shipIcon }).addTo(map);
+            // Use this icon in your marker
+            let marker = L.marker([lat, lon], { icon: shipIcon }).addTo(map);
 
-        // Bind the popup content to the marker
-        marker.bindPopup(`<b>${ship.name}</b><br>Lat: ${lat}, Lon: ${lon}`);
+            // Bind the popup content to the marker
+            marker.bindPopup(`<b>${ship.name}</b><br>Lat: ${lat}, Lon: ${lon}`);
 
-        // Show popup on mouseover and hide on mouseout
-        marker.on('mouseover', function() {
-            marker.openPopup();
-        });
+            // Show popup on mouseover and hide on mouseout
+            marker.on('mouseover', function() {
+                marker.openPopup();
+            });
 
-        marker.on('mouseout', function() {
-            marker.closePopup();
-        });
+            marker.on('mouseout', function() {
+                marker.closePopup();
+            });
 
-        // Store the marker to manage later
-        markers.push(marker);
+            // Store the marker to manage later
+            markers.push(marker);
+        } else {
+            console.log('Invalid ship coordinates:', ship);
+        }
     });
 }
 

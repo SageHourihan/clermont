@@ -1,5 +1,6 @@
 <?php
 require 'vendor/autoload.php';  // Load Composer autoloader
+require '/var/www/html/clermont/config/redis.php'; // Load Redis connection
 
 use Dotenv\Dotenv;
 use WebSocket\Client;
@@ -28,18 +29,40 @@ $message = json_encode([
 // Send the message
 $client->send($message);
 
+// Function to store ship data by MMSI in Redis
+function storeShipData($shipData) {
+    global $redis;
+
+    // Get the MMSI (unique ID) of the ship
+    $mmsi = $shipData['MetaData']['MMSI'];
+
+    // Store ship data with MMSI as the key
+    $redis->set("ship:$mmsi", json_encode($shipData));
+
+    // Optionally, add the MMSI to the active ships set if it's not already present
+    if (!$redis->sIsMember("ships:active", $mmsi)) {
+        $redis->sAdd("ships:active", $mmsi);
+    }
+
+    // Optional: Set an expiration time on the ship data (e.g., 1 hour)
+    // $redis->expire("ship:$mmsi", 3600); // Set expiration to 1 hour
+}
+
 // Listen for messages
 while (true) {
     try {
         $incomingMessage = $client->receive();
         echo "Received message: $incomingMessage\n";
 
-        // Store in Redis instead of writing to file
-        $cacheKey = 'ais_live_data';
-        $cacheTTL = 30; // Store for 30 seconds
-        $redis->setex($cacheKey, $cacheTTL, $incomingMessage);
+        // Assuming incoming message is in JSON format and needs to be decoded
+        $data = json_decode($incomingMessage, true);
+
+        // Store the ship data using the storeShipData function
+        storeShipData($data);
 
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
+
+
