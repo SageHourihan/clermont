@@ -12,9 +12,12 @@ map.fitBounds(bounds);
 
 // Add the OpenStreetMap tile layer to the map
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 12,
+    maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
+
+// Store markers in an array to manage them
+let markers = [];
 
 // Function to fetch weather data from Open-Meteo API
 function getWeatherData(lat, lng) {
@@ -55,3 +58,49 @@ $(document).ready(function() {
     var initialLng = (bounds[0][1] + bounds[1][1]) / 2;
     getWeatherData(initialLat, initialLng);
 });
+
+// Function to plot ships on the map
+// Function to plot ships on the map
+function plotShipData(shipData) {
+    console.log(shipData);
+
+    // Clear the existing markers
+    markers.forEach(marker => map.removeLayer(marker));
+    markers = []; // Reset the markers array
+
+    // Add new markers for each ship in the data
+    shipData.forEach(function (ship) {
+        const lat = ship.latitude;
+        const lon = ship.longitude;
+
+        // Define a custom icon
+        var shipIcon = L.icon({
+            iconUrl: '/clermont/assets/cargo-ship.png',  // Path to your custom icon image
+            iconSize: [30, 30],  // Size of the icon
+            iconAnchor: [16, 32],  // Point of the icon that will correspond to the marker's location
+            popupAnchor: [0, -32]  // Offset for the popup (optional)
+        });
+
+        // Use this icon in your marker
+        let marker = L.marker([lat, lon], { icon: shipIcon }).addTo(map);
+
+        // Bind the popup content to the marker
+        marker.bindPopup(`<b>${ship.name}</b><br>Lat: ${lat}, Lon: ${lon}`);
+
+        // Show popup on mouseover and hide on mouseout
+        marker.on('mouseover', function() {
+            marker.openPopup();
+        });
+
+        marker.on('mouseout', function() {
+            marker.closePopup();
+        });
+
+        // Store the marker to manage later
+        markers.push(marker);
+    });
+}
+
+
+// Expose the `plotShipData` function to the global scope for polling.js to call
+window.plotShipData = plotShipData;
