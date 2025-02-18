@@ -76,7 +76,7 @@ html, body {
 
 #weather-overlay {
     position: fixed;
-    top: 49px;
+    top: 50px;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(255, 255, 255, 0.7);

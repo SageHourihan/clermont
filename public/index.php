@@ -30,6 +30,6 @@
 
     <!-- <div id="response"></div> -->
     <script src="js/map.js"></script>
-    <!-- <script src="js/polling.js"></script> -->
+    <script src="js/polling.js"></script>
 </body>
 </html>

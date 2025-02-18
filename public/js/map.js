@@ -16,6 +16,9 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
+// Store markers in an array to manage them
+let markers = [];
+
 // Function to fetch weather data from Open-Meteo API
 function getWeatherData(lat, lng) {
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true&temperature_unit=fahrenheit&windspeed_unit=mph&windsor&hourly=temperature_2m,wind_speed_10m,wind_direction_10m`;
@@ -55,3 +58,28 @@ $(document).ready(function() {
     var initialLng = (bounds[0][1] + bounds[1][1]) / 2;
     getWeatherData(initialLat, initialLng);
 });
+
+// Function to plot ships on the map
+function plotShipData(shipData) {
+
+    console.log(shipData);
+    // Clear the existing markers
+    markers.forEach(marker => map.removeLayer(marker));
+    markers = []; // Reset the markers array
+
+    // Add new markers for each ship in the data
+    shipData.forEach(function (ship) {
+        const lat = ship.latitude;
+        const lon = ship.longitude;
+
+        // Create a new marker for each ship
+        let marker = L.marker([lat, lon]).addTo(map);
+        marker.bindPopup(`<b>${ship.name}</b><br>Lat: ${lat}, Lon: ${lon}`);
+
+        // Store the marker to manage later
+        markers.push(marker);
+    });
+}
+
+// Expose the `plotShipData` function to the global scope for polling.js to call
+window.plotShipData = plotShipData;
