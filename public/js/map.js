@@ -60,9 +60,10 @@ $(document).ready(function() {
 });
 
 // Function to plot ships on the map
+// Function to plot ships on the map
 function plotShipData(shipData) {
-
     console.log(shipData);
+
     // Clear the existing markers
     markers.forEach(marker => map.removeLayer(marker));
     markers = []; // Reset the markers array
@@ -72,7 +73,7 @@ function plotShipData(shipData) {
         const lat = ship.latitude;
         const lon = ship.longitude;
 
-       // Define a custom icon
+        // Define a custom icon
         var shipIcon = L.icon({
             iconUrl: '/clermont/assets/cargo-ship.png',  // Path to your custom icon image
             iconSize: [30, 30],  // Size of the icon
@@ -83,12 +84,23 @@ function plotShipData(shipData) {
         // Use this icon in your marker
         let marker = L.marker([lat, lon], { icon: shipIcon }).addTo(map);
 
+        // Bind the popup content to the marker
         marker.bindPopup(`<b>${ship.name}</b><br>Lat: ${lat}, Lon: ${lon}`);
+
+        // Show popup on mouseover and hide on mouseout
+        marker.on('mouseover', function() {
+            marker.openPopup();
+        });
+
+        marker.on('mouseout', function() {
+            marker.closePopup();
+        });
 
         // Store the marker to manage later
         markers.push(marker);
     });
 }
+
 
 // Expose the `plotShipData` function to the global scope for polling.js to call
 window.plotShipData = plotShipData;
