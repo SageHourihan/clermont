@@ -16,7 +16,7 @@ $redis->auth($redisPassword);
 
 // Test connection
 if ($redis->ping()) {
-    echo "Connected to Redis!";
+    echo "Connected to Redis!\n";
 } else {
     echo "Failed to connect.";
 }
