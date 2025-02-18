@@ -25,6 +25,7 @@
     <!-- <h1>Live Ship Tracking</h1> -->
     <!-- <pre id="dataDisplay">Waiting for data...</pre> -->
 
+
     <div id="map"></div>
     <div id="coordinates"></div>
 

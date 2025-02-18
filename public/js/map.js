@@ -12,7 +12,7 @@ map.fitBounds(bounds);
 
 // Add the OpenStreetMap tile layer to the map
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 12,
+    maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
@@ -72,8 +72,17 @@ function plotShipData(shipData) {
         const lat = ship.latitude;
         const lon = ship.longitude;
 
-        // Create a new marker for each ship
-        let marker = L.marker([lat, lon]).addTo(map);
+       // Define a custom icon
+        var shipIcon = L.icon({
+            iconUrl: '/clermont/assets/cargo-ship.png',  // Path to your custom icon image
+            iconSize: [30, 30],  // Size of the icon
+            iconAnchor: [16, 32],  // Point of the icon that will correspond to the marker's location
+            popupAnchor: [0, -32]  // Offset for the popup (optional)
+        });
+
+        // Use this icon in your marker
+        let marker = L.marker([lat, lon], { icon: shipIcon }).addTo(map);
+
         marker.bindPopup(`<b>${ship.name}</b><br>Lat: ${lat}, Lon: ${lon}`);
 
         // Store the marker to manage later
