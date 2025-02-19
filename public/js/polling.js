@@ -1,4 +1,4 @@
-setInterval(function() {
+function fetchAndPlotShips() {
     $.ajax({
         url: '../src/api/getData.php',  // Ensure correct path
         type: 'GET',
@@ -53,4 +53,10 @@ setInterval(function() {
             console.error("AJAX error:", status, error);
         }
     });
-}, 5000); // Poll every 5 seconds
+}
+
+// Run on page load
+fetchAndPlotShips();
+
+// Poll every 5 seconds
+setInterval(fetchAndPlotShips, 5000);
