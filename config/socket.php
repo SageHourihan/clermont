@@ -36,17 +36,19 @@ function storeShipData($shipData) {
     // Get the MMSI (unique ID) of the ship
     $mmsi = $shipData['MetaData']['MMSI'];
 
-    // Store ship data with MMSI as the key
-    $redis->set("ship:$mmsi", json_encode($shipData));
+    // Store ship data with MMSI as the key and set expiration time of 10 minutes (600 seconds)
+    $redis->setex("ship:$mmsi", 600, json_encode($shipData));
 
     // Optionally, add the MMSI to the active ships set if it's not already present
     if (!$redis->sIsMember("ships:active", $mmsi)) {
         $redis->sAdd("ships:active", $mmsi);
     }
 
-    // Optional: Set an expiration time on the ship data (e.g., 1 hour)
-    // $redis->expire("ship:$mmsi", 3600); // Set expiration to 1 hour
+    // Set expiration time for ships:active to 30 seconds
+    $redis->expire("ships:active", 30);  // Set expiration for the active set to 30 seconds
+    $redis->expire("ship:$mmsi", 600);  // Set expiration for the ship data to 10 minutes (600 seconds)
 }
+
 
 // Listen for messages
 while (true) {
