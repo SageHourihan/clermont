@@ -1,16 +1,33 @@
 <?php
 
-function getData() {
-    $file = '/var/www/html/clermont/data/data.json';
+$memcache = new Memcached();
+$memcache->addServer('127.0.0.1', 11211);
 
-    // Read the file line by line and decode each JSON object
-    $lines = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    $jsonArray = array_map('json_decode', $lines);
-    
-    // Return as a JSON array
+function getData($memcache) {
+    // Get the list of active ships (an array of MMSIs)
+    $activeShips = $memcache->get("ships:active");
+
+    // If there are no active ships, return an empty array
+    if ($activeShips === false || !is_array($activeShips)) {
+        $activeShips = [];
+    }
+
+    $shipData = [];
+
+    // Retrieve each ship's data from Memcached
+    foreach ($activeShips as $mmsi) {
+        $shipInfo = $memcache->get("ship:$mmsi");
+
+        if ($shipInfo !== false) {
+            $shipData[] = json_decode($shipInfo, true);
+        }
+    }
+
+    // Return as JSON
     header('Content-Type: application/json');
-    echo json_encode($jsonArray); // Changed from return to echo
+    // echo json_encode($shipData);
+    echo json_encode($shipData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 }
 
-// Call the function so the script actually outputs data
-getData();
+// Call the function
+getData($memcache);
