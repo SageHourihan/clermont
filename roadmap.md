@@ -15,7 +15,7 @@
 ---
 
 ## 2️⃣ Storing & Structuring Processed Data
-Right now, you're storing **raw data** in MongoDB's `raw_data` collection. You need a **processed** dataset for efficient querying.
+Storing **raw data** in Memcache. `ship:$mmsi` stores raw ship data using the ships MMSI as a unique key. `ships:active` is a list of active ships.
 
 ### Approach:
 - Design a **structured schema** for processed vessel data.
@@ -24,28 +24,24 @@ Right now, you're storing **raw data** in MongoDB's `raw_data` collection. You n
 
 ### Next Actions:
 - Define what fields are important for your UI.
-- Set up a processing script to clean and move data from `raw_data` → `processed_data`.
+- Set up a processing script to clean and move data from `raw_data` → `processed_data` - this will be an SQL database.
 
 ---
 
 ## 3️⃣ Building API Endpoints for the UI
-Now that data is stored, your frontend needs to **access and display it**.
 
 ### Approach:
-- **Create API endpoints** to fetch relevant vessel data.
 - Implement **querying and filtering** (e.g., find ships near a location, active vessels, specific MMSI).
 - Consider **pagination** for large datasets.
 
 ### Next Actions:
-- Build a `getVessels.php` API to return vessel data.
 - Add filters for `MMSI`, `shipName`, `location`, `time range`, etc.
 
 ---
 
 ## 4️⃣ Live Data Handling & Frontend Updates
-- Right now, you’re using **AJAX polling** for live updates.
+### Approach:
 - **Optimize polling intervals** to reduce load.
-- Consider **websockets or event-driven updates** for real-time tracking.
 
 ### Next Actions:
 - Test how frequently ships update.
@@ -54,20 +50,22 @@ Now that data is stored, your frontend needs to **access and display it**.
 ---
 
 ## 5️⃣ UI Enhancements & Visualization
-- Use **Leaflet.js** or **Google Maps API** to show vessel positions.
 - Add **filters and search** to explore ships by name, speed, location, etc.
 - Display **historical movement** (past routes).
+- Create **user accounts** so users can track ships.
+- Add functionality to nav bar links
 
 ### Next Actions:
-- Display ships on a map.
-- Add real-time updates to vessel positions.
+- Display historical data
+- Nav bar functionality
+- Create user accounts
 
 ---
 
-## Final Thought
-Right now, your **biggest priority** should be:
+## Final Thoughts
+My **biggest priorities** are:
 - Cleaning & processing raw data.
-- Creating an API for the frontend.
-- Building a simple UI to display ships.
+- Tune polling and test the frequency of ship updates.
+- UI Enhancements
 
 ---
