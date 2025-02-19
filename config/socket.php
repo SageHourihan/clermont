@@ -45,7 +45,7 @@ function storeShipData($shipData) {
     }
 
     // Set expiration time for ships:active to 30 seconds
-    $redis->expire("ships:active", 30);  // Set expiration for the active set to 30 seconds
+    $redis->expire("ships:active", 300);  // Set expiration for the active set to 30 seconds
     $redis->expire("ship:$mmsi", 600);  // Set expiration for the ship data to 10 minutes (600 seconds)
 }
 
