@@ -50,7 +50,7 @@ while (true) {
             echo 'no mmsi in messag';
         }
 
-        file_put_contents('/var/www/html/clermont/data/data.json', json_encode($incomingMessage) . "\n", FILE_APPEND);
+        // file_put_contents('/var/www/html/clermont/data/data.json', json_encode($incomingMessage) . "\n", FILE_APPEND);
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
