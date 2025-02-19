@@ -1,51 +1,84 @@
-
 # Clermont
 
-**Clermont** is a live ship tracking tool designed to monitor vessels using real-time data. At its current stage, the tracker focuses on ships within the Port of Detroit and the surrounding waters, providing detailed location and weather information for maritime traffic in this specific area.
+![Clermont Platform](assets/platform_pic.png)
+
+Clermont is a sophisticated maritime vessel tracking platform developed by Black Sun Technologies. The system provides real-time monitoring and analytics for ships in the Port of Detroit and surrounding waters, offering crucial insights for maritime logistics and supply chain management.
+
 ## Table of Contents
-
-1. [Overview](#overview)
+1. [Current Status](#current-status)
 2. [Features](#features)
-3. [Usage](#usage)
-4. [Contributing](#contributing)
-4. [License](#license)
+3. [System Architecture](#system-architecture)
+4. [Usage Guide](#usage-guide)
+5. [Development Roadmap](#development-roadmap)
+6. [License](#license)
 
-## Overview
+## Current Status
 
-Clermont utilizes the AISStream API to pull live ship data and display it on an interactive map. Currently, it is limited to tracking ships in and around the Port of Detroit, providing users with real-time vessel locations and weather data relevant to this specific region. The interactive map, allows users to track vessels' movements and view weather conditions in the immediate area.
+Clermont is currently in active development, with core tracking functionality implemented for the Port of Detroit region. The platform successfully integrates real-time AIS data with weather information to provide a comprehensive maritime awareness solution.
 
-While the tool currently focuses on the Port of Detroit, there are plans to expand its geographic coverage to include other ports and maritime routes in the future.
+### Current Coverage
+- Port of Detroit
+- Detroit River
+- Surrounding Great Lakes waters
 
 ## Features
 
-- **Real-Time Ship Tracking**: Monitor ships in the Port of Detroit and surrounding waters on an interactive map.
-- **Weather Data Integration**: Get real-time weather information for the tracked area, including temperature, wind speed, and wind direction.
-- **Responsive Design**: Mobile-friendly interface for easy access on any device.
-- **Live Updates**: Uses AJAX polling for continuous real-time data updates without the need for a page reload.
-- **Intuitive User Interface**: Easy-to-use map display and clear navigation for efficient ship tracking.
+### Real-Time Tracking
+- Live vessel position monitoring using AIS data
+- Interactive map interface with custom ship markers
+- Continuous data updates via WebSocket connection
 
-## Usage
+### Weather Integration
+- Real-time temperature readings
+- Wind speed and direction data
+- Dynamic weather updates based on map position
 
-### Start Polling
+### Technical Implementation
+- WebSocket integration for real-time data streaming
+- MongoDB for efficient data storage
+- Memcached for optimized performance
+- Mobile-responsive design
 
-Clermont uses AJAX polling to fetch and display ship data in real-time. To start tracking ships:
+## System Architecture
 
-1. Open the application in your browser.
-2. The map will load, and the application will automatically start fetching live data from the backend.
-3. You will see markers representing ship locations on the map within the Port of Detroit and surrounding waters.
-4. Real-time weather data will be updated based on the coordinates of the map's center.
+Clermont employs a modern LAMP stack architecture with additional technologies for real-time capabilities:
 
-### Weather Overlay
+- Backend: PHP with MongoDB and MySQL
+- Frontend: JavaScript with Leaflet.js
+- Real-time: WebSocket connections
+- Caching: Memcached
+- APIs: AISStream, OpenWeather
 
-The weather overlay provides current weather conditions at your mouses location on the map. The weather data includes:
-- Temperature (in Fahrenheit)
-- Wind speed (in miles per hour)
-- Wind direction (in degrees)
+## Usage Guide
 
-## Contributing
+### Tracking Interface
+1. Access the platform through your web browser
+2. The map automatically centers on the Port of Detroit
+3. Ship markers appear in real-time as vessels are detected
+4. Hover over markers for basic vessel information
+5. Click markers for detailed ship data
 
-Since this is a closed-source project, contributions are currently not accepted. However, if you have suggestions or feature requests, please reach out to the project maintainers.
+### Weather Information
+- Weather data updates as you move your mouse across the map
+- Temperature displayed in Fahrenheit
+- Wind speed shown in miles per hour
+- Wind direction indicated in degrees
+
+## Development Roadmap
+
+Clermont is following a structured development plan to expand its capabilities. View our detailed [Development Roadmap](ROADMAP.md) for information about upcoming features and enhancements.
+
+Key upcoming developments include:
+- Enhanced vessel information display
+- Advanced analytics dashboard
+- Custom alert system
+- Expanded geographic coverage
+- Supply chain integration
 
 ## License
 
-This project is **closed-source**. © 2025 Black Sun Technologies. All rights reserved.
+© 2025 Black Sun Technologies. All rights reserved.
+
+---
+
+*Clermont is a closed-source project maintained by Black Sun Technologies. For inquiries about commercial usage or partnership opportunities, please contact our business development team.*

@@ -1,71 +1,122 @@
+# Clermont Development Roadmap
 
-# Project Roadmap
+## Priority 1: Core Tracking Enhancement
+Critical features needed to provide basic but comprehensive vessel tracking functionality.
 
-## 1️⃣ Data Validation & Cleanup
-- **Ensure Data Integrity**
-  - Check for duplicate entries based on `MMSI`, `timestamp`, or another unique identifier.
-  - Filter out incomplete or malformed data.
-- **Normalize Data**
-  - Ensure consistent data types (e.g., `latitude/longitude` as floats, `MMSI` as integers).
+### 1. Ship Information System
+- Ship details panel with MMSI, vessel type, size, and status
+- Historical movement tracking with previous positions
+- Current voyage information (origin, destination, ETA)
+- Integration with vessel databases for detailed ship information
+- Real-time speed and heading data display
 
-### Next Actions:
-- Implement basic validation rules.
-- Decide how to handle duplicate or inconsistent data.
+### 2. Advanced Mapping Features
+- Vessel heading indicators with directional arrows
+- Ship trail visualization showing recent path
+- Port boundary markers and information
+- Distance calculation tools
+- ETA prediction based on current speed and heading
 
----
+### 3. Alert System
+- Port arrival/departure notifications
+- Speed and course change alerts
+- Custom geofence alerts
+- Weather condition warnings
+- Basic email notification system
 
-## 2️⃣ Storing & Structuring Processed Data
-Storing **raw data** in Memcache. `ship:$mmsi` stores raw ship data using the ships MMSI as a unique key. `ships:active` is a list of active ships.
+## Priority 2: Business Intelligence
+Features that provide valuable insights and analysis tools.
 
-### Approach:
-- Design a **structured schema** for processed vessel data.
-- Store only **relevant fields** in a `processed_data` collection for faster lookups.
-- Update this collection periodically with cleaned and enriched data.
+### 1. Analytics Dashboard
+- Vessel traffic patterns and heatmaps
+- Port congestion analysis
+- Route frequency analysis
+- Delay statistics
+- Basic performance metrics
 
-### Next Actions:
-- Define what fields are important for your UI.
-- Set up a processing script to clean and move data from `raw_data` → `processed_data` - this will be an SQL database.
+### 2. Reporting System
+- Custom report builder
+- CSV/PDF export capabilities
+- Basic scheduled reports
+- Historical data viewing
+- Simple trend visualization
 
----
+## Priority 3: Supply Chain Integration
+Features that enhance logistics and cargo tracking capabilities.
 
-## 3️⃣ Building API Endpoints for the UI
+### 1. Cargo Tracking
+- Basic cargo status updates
+- Container tracking integration
+- Simple documentation management
+- Load/unload status tracking
+- Estimated cargo arrival times
 
-### Approach:
-- Implement **querying and filtering** (e.g., find ships near a location, active vessels, specific MMSI).
-- Consider **pagination** for large datasets.
+### 2. Risk Management
+- Weather risk indicators
+- Basic route optimization suggestions
+- Simple delay prediction
+- Alternative route recommendations
+- Weather impact assessment
 
-### Next Actions:
-- Add filters for `MMSI`, `shipName`, `location`, `time range`, etc.
+## Priority 4: System Expansion
+Features that extend the system's reach and capabilities.
 
----
+### 1. Geographic Coverage
+- Additional Great Lakes ports
+- Major US East Coast ports
+- Canadian maritime ports
+- St. Lawrence Seaway integration
+- Regional weather pattern analysis
 
-## 4️⃣ Live Data Handling & Frontend Updates
-### Approach:
-- **Optimize polling intervals** to reduce load.
+### 2. Integration Capabilities
+- Basic REST API
+- Simple data export tools
+- Standard data exchange formats
+- Real-time data feed access
+- Partner system connectors
 
-### Next Actions:
-- Test how frequently ships update.
-- Tune polling interval or evaluate WebSockets.
+## Future Considerations
+Features to consider for long-term development.
 
----
+### 1. Advanced Analytics
+- Machine learning for prediction
+- Advanced route optimization
+- Detailed risk analysis
+- Performance benchmarking
+- Custom analytics tools
 
-## 5️⃣ UI Enhancements & Visualization
-- Add **filters and search** to explore ships by name, speed, location, etc.
-- Display **historical movement** (past routes).
-- Create **user accounts** so users can track ships.
-- Add functionality to nav bar links
+### 2. Enhanced Integration
+- Full-featured API
+- Advanced partner integrations
+- Real-time data synchronization
+- Custom integration solutions
+- Automated data exchange
 
-### Next Actions:
-- Display historical data
-- Nav bar functionality
-- Create user accounts
+## Implementation Notes
 
----
+### Phase Approach
+1. Each priority level should be substantially complete before moving to the next
+2. Features within each priority can be developed in parallel when resources allow
+3. Each feature should be tested in isolation before integration
+4. User feedback should be gathered after each major feature release
 
-## Final Thoughts
-My **biggest priorities** are:
-- Cleaning & processing raw data.
-- Tune polling and test the frequency of ship updates.
-- UI Enhancements
+### Development Guidelines
+1. Maintain focus on core tracking reliability
+2. Ensure scalability of all new features
+3. Keep user interface consistent and intuitive
+4. Prioritize real-time data accuracy
+5. Follow security best practices
 
----
+### Technical Considerations
+1. Optimize database queries for large datasets
+2. Implement proper error handling and logging
+3. Ensure mobile responsiveness
+4. Maintain code documentation
+5. Regular performance testing
+
+This roadmap is subject to change based on:
+- User feedback and needs
+- Technical constraints
+- Resource availability
+- Market conditions
+- Industry regulations
