@@ -34,20 +34,34 @@ while (true) {
     try {
         // Receive a message from the WebSocket server
         $incomingMessage = $client->receive();
-        // echo "Received message: $incomingMessage\n";
+        echo "Received message: $incomingMessage\n";
 
         // Unescape the JSON string (convert escaped quotes to normal quotes)
         $unescapedMessage = stripslashes($incomingMessage);
         // Decode the unescaped JSON string into an associative array
         $data = json_decode($unescapedMessage, true);
 
-        if(isset($data['MetaData']['MMSI'])){
+        if (isset($data['MetaData']['MMSI'])) {
             $mmsi = $data['MetaData']['MMSI'];
 
+            // Store the ship's message using "set()" to allow updates
             $memcache->set("ship:$mmsi", $incomingMessage, 3600);
-            echo 'stored data in memcache';
-        }else{
-            echo 'no mmsi in messag';
+
+            // Get the list of active ships
+            $activeShips = $memcache->get("ships:active");
+
+            // If it doesn't exist, initialize it as an empty array
+            if ($activeShips === false) {
+                $activeShips = [];
+            }
+
+            // Add the MMSI if it's not already in the list
+            if (!in_array($mmsi, $activeShips)) {
+                $activeShips[] = $mmsi;
+                $memcache->set("ships:active", $activeShips, 600); // delete after 5 minutes
+            }
+
+            echo "Stored data in memcache\n";
         }
 
         // file_put_contents('/var/www/html/clermont/data/data.json', json_encode($incomingMessage) . "\n", FILE_APPEND);
