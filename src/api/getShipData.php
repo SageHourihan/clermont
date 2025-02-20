@@ -19,7 +19,7 @@ if (isset($_GET['mmsi']) && !empty($_GET['mmsi'])) {
     $cacheService = new CacheService();
     $shipData = $cacheService->getShipData($mmsi);
 
-    echo json_encode($shipData);
+    echo $shipData;
 
 
 } else {
