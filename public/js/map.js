@@ -50,8 +50,10 @@ $(document).ready(function() {
         $('#coordinates').text('Latitude: ' + lat + ' | Longitude: ' + lng);
 
         // Fetch the weather data for the center of the map
-        getWeatherData(lat, lng);
+        // getWeatherData(lat, lng);
     });
+
+    // getWeatherData
 
     // Also fetch the weather data for the initial map view (center of the bounds)
     var initialLat = (bounds[0][0] + bounds[1][0]) / 2;
@@ -59,7 +61,6 @@ $(document).ready(function() {
     getWeatherData(initialLat, initialLng);
 });
 
-// Function to plot ships on the map
 // Function to plot ships on the map
 function plotShipData(shipData) {
     console.log(shipData);
@@ -98,7 +99,68 @@ function plotShipData(shipData) {
 
         // Store the marker to manage later
         markers.push(marker);
+
+        marker.on('click', function() {
+            getShipData(ship.mmsi);
+        });
     });
+}
+
+function getShipData(mmsi) {
+    $.ajax({
+        url: '../src/api/getShipData.php',
+        type: 'GET',
+        data: {mmsi:mmsi},
+        success: function(response) {
+            try {
+                const data = JSON.parse(response);
+                displayShipDetails(data);
+            } catch (error) {
+                console.log("Error processing data:", error);
+            }
+        },
+        error: function(xhr, status, error){
+            console.log("AJAX Error:",  status, error);
+        }
+    });
+}
+
+function displayShipDetails(data) {
+    const panel = $('#shipDetailPanel');
+    panel.html(`
+        <span class="close-btn" onclick="$('#shipDetailPanel').fadeOut();">&times;</span>
+        <h2>${data.MetaData.ShipName.trim() || 'N/A'}</h2>
+        <p><strong>MMSI:</strong> ${data.MetaData.MMSI}</p>
+        <p><strong>Latitude:</strong> ${data.Message.PositionReport.Latitude.toFixed(6)}</p>
+        <p><strong>Longitude:</strong> ${data.Message.PositionReport.Longitude.toFixed(6)}</p>
+        <p><strong>SOG:</strong> ${data.Message.PositionReport.Sog} knots</p>
+        <p><strong>Heading:</strong> ${data.Message.PositionReport.TrueHeading}&deg;</p>
+        <p><strong>Navigation Status:</strong> ${getNavStatus(data.Message.PositionReport.NavigationalStatus)}</p>
+        <p><strong>Last Update:</strong> ${data.MetaData.time_utc}</p>
+    `);
+    panel.fadeIn(); // Show the panel with animation
+}
+
+// Close button functionality
+$('#closePanelBtn').click(function() {
+    $('#shipDetailPanel').fadeOut();
+});
+
+// Helper for navigational status
+function getNavStatus(status) {
+    const statusMap = {
+        0: "Underway (Engine On)",
+        1: "At Anchor",
+        2: "Not Under Command",
+        3: "Restricted Manoeuvrability",
+        4: "Constrained by Draft",
+        5: "Moored",
+        6: "Aground",
+        7: "Fishing",
+        8: "Underway (Sailing)",
+        15: "Unknown"
+    };
+    return statusMap[status] || "Unknown";
 }
 
 

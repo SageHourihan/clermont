@@ -22,8 +22,19 @@
             <div class="profile"></div>
         </div>
     </div>
-    <!-- <h1>Live Ship Tracking</h1> -->
-    <!-- <pre id="dataDisplay">Waiting for data...</pre> -->
+
+    <div id="shipDetailPanel">
+        <h2>Ship Details</h2>
+        <p><strong>Name:</strong> <span id="shipName"></span></p>
+        <p><strong>MMSI:</strong> <span id="mmsi"></span></p>
+        <p><strong>Latitude:</strong> <span id="latitude"></span></p>
+        <p><strong>Longitude:</strong> <span id="longitude"></span></p>
+        <p><strong>Speed (SOG):</strong> <span id="sog"></span> knots</p>
+        <p><strong>Heading:</strong> <span id="heading"></span>°</p>
+        <p><strong>Navigational Status:</strong> <span id="navStatus"></span></p>
+        <p><strong>Last Update:</strong> <span id="lastUpdate"></span></p>
+        <button id="closePanelBtn">Close</button>
+    </div>
 
 
     <div id="map"></div>

@@ -85,3 +85,33 @@ html, body {
     z-index: 1000;
 }
 
+#shipDetailPanel {
+    display:none;
+    padding:10px;
+    border:1px solid #ccc;
+    background-color:#f9f9f9;
+    position: fixed; /* Keeps the panel fixed on the screen */
+    top: 0;
+    right: 0;
+    width: 400px; /* Adjust the width as needed */
+    height: 100vh; /* Full height of the viewport */
+    background-color: #f8f9fa;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+    overflow-y: auto; /* Allow scrolling if content overflows */
+    padding: 20px;
+    z-index: 1000; /* Ensure it appears above other content */
+}
+
+/* Optional: Add a close button style */
+#shipDetailPanel .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+#shipDetailPanel h2 {
+    margin-top: 0;
+    color: #007bff;
+}
