@@ -1,6 +1,6 @@
 function fetchAndPlotShips() {
     $.ajax({
-        url: '../src/api/getData.php',  // Ensure correct path
+        url: '../src/api/getActiveShips.php',  // Ensure correct path
         type: 'GET',
         dataType: 'json',  // Automatically parses JSON
         success: function(data) {
@@ -22,6 +22,7 @@ function fetchAndPlotShips() {
                     // Check for PositionReport and extract relevant data
                     if (item.Message?.PositionReport) {
                         shipData.name = item.MetaData?.ShipName || "Unknown Ship";
+                        shipData.mmsi = item.MetaData?.MMSI || "Unknown MMSI";
                         shipData.latitude = item.Message.PositionReport.Latitude;
                         shipData.longitude = item.Message.PositionReport.Longitude;
                     }
@@ -30,6 +31,7 @@ function fetchAndPlotShips() {
                     if (!shipData.latitude || !shipData.longitude) {
                         if (item.Message?.ShipStaticData) {
                             shipData.name = item.MetaData?.ShipName || "Unknown Ship";
+                            shipData.mmsi = item.MetaData?.MMSI || "Unknown MMSI";
                             shipData.latitude = item.Message.ShipStaticData.latitude;
                             shipData.longitude = item.Message.ShipStaticData.longitude;
                         }

@@ -60,7 +60,6 @@ $(document).ready(function() {
 });
 
 // Function to plot ships on the map
-// Function to plot ships on the map
 function plotShipData(shipData) {
     console.log(shipData);
 
@@ -98,6 +97,30 @@ function plotShipData(shipData) {
 
         // Store the marker to manage later
         markers.push(marker);
+
+        marker.on('click', function() {
+            getShipData(ship.mmsi);
+        });
+    });
+}
+
+function getShipData(mmsi) {
+    $.ajax({
+        url: '../src/api/getShipData.php',
+        type: 'GET',
+        data: {mmsi:mmsi},
+        success: function(data){
+            try {
+
+                console.log(data);
+
+            } catch (error) {
+                console.log("Error processing data:", error);
+            }
+        },
+        error: function(xhr, status, error){
+            console.log("AJAX Error:",  status, error);
+        }
     });
 }
 
