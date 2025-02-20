@@ -47,4 +47,6 @@ public/build/
 # Ignore data
 data/*
 
-._*
+**/._*
+
+/scripts/local/*
