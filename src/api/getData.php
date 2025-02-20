@@ -31,3 +31,5 @@ function getData($memcache) {
 
 // Call the function
 getData($memcache);
+
+
