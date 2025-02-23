@@ -37,16 +37,41 @@ function plotRoute(historicalData) {
         map.removeLayer(routePolyline);
     }
 
+    if (historicalData.length === 0) {
+        console.warn("No historical data available to plot.");
+        return;
+    }
+
     // Collect coordinates for the polyline
     let coordinates = historicalData.map(point => [point.latitude, point.longitude]);
 
-    // Plot markers and build coordinates array
+    // Add start and end circle markers
+    const startPoint = historicalData[0];
+    const endPoint = historicalData[historicalData.length - 1];
+
+    // Start point marker (green)
+    let startMarker = L.circleMarker([startPoint.latitude, startPoint.longitude], {
+        color: 'green',
+        radius: 8,
+        weight: 3,
+        fillOpacity: 0.8
+    }).addTo(map).bindPopup("Start Point");
+    markers.push(startMarker);
+
+    // End point marker (red)
+    let endMarker = L.circleMarker([endPoint.latitude, endPoint.longitude], {
+        color: 'red',
+        radius: 8,
+        weight: 3,
+        fillOpacity: 0.8
+    }).addTo(map).bindPopup("End Point");
+    markers.push(endMarker);
+
+    // Plot markers for each point (optional, remove if cluttered)
     historicalData.forEach(function (point) {
         const lat = point.latitude;
         const lon = point.longitude;
-
-        // Add marker for each point
-        let marker = L.marker([lat, lon]).addTo(map);
+        let marker = L.marker([lat, lon]);
         markers.push(marker);
     });
 
@@ -58,6 +83,6 @@ function plotRoute(historicalData) {
         dashArray: [20,10],
     }).addTo(map);
 
-    // Optionally fit the map view to the polyline bounds
+    // Fit the map view to the polyline bounds
     map.fitBounds(routePolyline.getBounds());
 }
