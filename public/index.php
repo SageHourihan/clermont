@@ -12,16 +12,8 @@
 </head>
 <body>
 
-    <div id="navbar">
-        <div class="brand">Clermont</div>
-        <div class="nav-items">
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
-            <input type="text" placeholder="Search...">
-            <div class="profile"></div>
-        </div>
-    </div>
+    <?php include 'views/navbar.html'; ?>
+
 
     <div id="shipDetailPanel">
         <h2>Ship Details</h2>
