@@ -114,8 +114,8 @@
             <p>Clermont is freely available on GitHub under the MIT license. We welcome contributions from developers of all skill levels.</p>
 
             <div class="github-buttons">
-                <a href="https://github.com/BlackSunTech/Clermont" class="github-button">View on GitHub</a>
-                <a href="https://github.com/BlackSunTech/Clermont/issues" class="github-button">Report Issues</a>
+                <a href="https://github.com/Black-Sun-Technologies/clermont" class="github-button">View on GitHub</a>
+                <a href="https://github.com/Black-Sun-Technologies/clermont/issues" class="github-button">Report Issues</a>
             </div>
         </section>
 
@@ -125,7 +125,7 @@
 
             <div class="code-block">
                 <span class="code-comment"># Clone the repository</span><br>
-                git clone https://github.com/BlackSunTech/Clermont.git<br><br>
+                git clone https://github.com/Black-Sun-Technologies/clermont<br><br>
 
                 <span class="code-comment"># Navigate to the project directory</span><br>
                 cd Clermont<br><br>
@@ -174,7 +174,7 @@
             <p class="cta-description">Join our growing community of developers and maritime enthusiasts building the future of open-source vessel tracking.</p>
 
             <div class="cta-buttons">
-                <a href="https://github.com/BlackSunTech/Clermont" class="cta-button">Download Clermont</a>
+                <a href="https://github.com/Black-Sun-Technologies/clermont" class="cta-button">Download Clermont</a>
                 <a href="documentation.php" class="cta-button secondary">Read the Docs</a>
             </div>
         </section>
