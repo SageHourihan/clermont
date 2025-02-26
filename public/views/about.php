@@ -17,7 +17,7 @@
         <section class="hero-section">
             <div class="hero-content">
                 <h1 class="hero-title">Clermont</h1>
-                <p class="hero-subtitle">An open-source maritime tracking system by Black Sun Technologies, designed for self-hosting and community collaboration. Currently in active development.</p>
+                <p class="hero-subtitle">An open-source maritime tracking system, designed for self-hosting and community collaboration. Currently in active development.</p>
             </div>
         </section>
 
@@ -63,7 +63,7 @@
             <div class="about-content">
                 <h2 class="section-title">About Clermont</h2>
                 <div class="about-description">
-                    <p>Clermont began as an internal project at Black Sun Technologies and has evolved into an open-source initiative to democratize access to maritime tracking technology.</p>
+                    <p>Clermont is an open-source initiative to democratize access to maritime tracking technology.</p>
                     <p>Named after the first steamboat to successfully navigate American waters, Clermont represents our commitment to innovation and accessibility in maritime technology.</p>
                     <p>By making Clermont open source, we aim to create a community-driven platform that can adapt to the diverse needs of maritime professionals, researchers, and enthusiasts worldwide.</p>
                     <p>Our vision is to build a robust ecosystem of plugins, extensions, and integrations that enhance the core tracking functionality while maintaining ease of deployment and configuration.</p>
@@ -114,8 +114,8 @@
             <p>Clermont is freely available on GitHub under the MIT license. We welcome contributions from developers of all skill levels.</p>
 
             <div class="github-buttons">
-                <a href="https://github.com/Black-Sun-Technologies/clermont" class="github-button">View on GitHub</a>
-                <a href="https://github.com/Black-Sun-Technologies/clermont/issues" class="github-button">Report Issues</a>
+                <a href="https://github.com/SageHourihan/clermont" class="github-button">View on GitHub</a>
+                <a href="https://github.com/SageHourihan/clermont/issues" class="github-button">Report Issues</a>
             </div>
         </section>
 
@@ -125,7 +125,7 @@
 
             <div class="code-block">
                 <span class="code-comment"># Clone the repository</span><br>
-                git clone https://github.com/Black-Sun-Technologies/clermont<br><br>
+                git clone https://github.com/SageHourihan/clermont<br><br>
 
                 <span class="code-comment"># Navigate to the project directory</span><br>
                 cd Clermont<br><br>
@@ -174,7 +174,7 @@
             <p class="cta-description">Join our growing community of developers and maritime enthusiasts building the future of open-source vessel tracking.</p>
 
             <div class="cta-buttons">
-                <a href="https://github.com/Black-Sun-Technologies/clermont" class="cta-button">Download Clermont</a>
+                <a href="https://github.com/SageHourihan/clermont" class="cta-button">Download Clermont</a>
                 <a href="documentation.php" class="cta-button secondary">Read the Docs</a>
             </div>
         </section>
