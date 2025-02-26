@@ -85,8 +85,8 @@
 
                 <div class="timeline-item">
                     <div class="timeline-date">In Progress</div>
-                    <div class="timeline-title">Plugin Architecture</div>
-                    <div class="timeline-description">Building a flexible plugin system to allow for community extensions and customizations.</div>
+                    <div class="timeline-title">Ship Information System</div>
+                    <div class="timeline-description">Ship details panel, historical movement tracking, current voyage information, integration with vessel database, and real-time speed and heading data display.</div>
                 </div>
 
                 <div class="timeline-item">
