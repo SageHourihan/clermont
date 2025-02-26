@@ -1,0 +1,110 @@
+/* Additional CSS for Contact Page */
+
+/* Contact Form Section Styles */
+.contact-form-section {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 40px;
+    margin-bottom: 60px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.form-group label {
+    display: block;
+    font-family: 'Orbitron', sans-serif;
+    color: #3B3D54;
+    margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 90%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #789abc;
+    outline: none;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.form-submit {
+    margin-top: 30px;
+}
+
+/* Feature Card Contact Link */
+.feature-contact {
+    margin-top: 15px;
+}
+
+.feature-contact a {
+    color: #789abc;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.feature-contact a:hover {
+    color: #3B3D54;
+    text-decoration: underline;
+}
+
+/* Form Response Messages */
+.success-message {
+    background-color: rgba(120, 154, 188, 0.2);
+    color: #3B3D54;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    border-left: 4px solid #789abc;
+}
+
+.error-message {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    border-left: 4px solid #dc3545;
+}
+
+/* Button state for form submission */
+.github-button:disabled {
+    background-color: #a0a0a0;
+    cursor: not-allowed;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .contact-form-section {
+        padding: 30px 20px;
+    }
+}
