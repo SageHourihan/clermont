@@ -129,6 +129,14 @@ To run Clermont Tracker locally, you'll need the following:
 -   **Historical route:** The `historical_route.php` page displays the historical route of a selected vessel. You can access this page by clicking on a vessel on the map and then clicking the "Get Route" button.
 -   **About:** The `about.php` page provides information about the Clermont Tracker project.
 -   **Contact:** The contact form is located at the contact button in the nav bar.
+-   **Memcached:** The application leverages Memcached to cache frequently accessed data, improving performance. Ensure your Memcached server is configured correctly and accessible by the application.
+-   **Running the Socket Worker:** For real-time data processing, you need to run the socket worker script. Open a terminal and navigate to the project's `src/Worker` directory. Then, execute the following command:
+
+    ```bash
+    php socket.php
+    ```
+
+    This script listens for incoming data and processes it, updating the database and Memcached cache. It should run continuously in the background. Consider using a process manager like `screen` or `tmux` to keep it running or setup a cron job.
 
 ### Weather Information
 
