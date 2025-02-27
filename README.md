@@ -4,6 +4,10 @@
 
 Clermont is a sophisticated maritime vessel tracking platform. The system provides real-time monitoring and analytics for ships in the Port of Detroit and surrounding waters, offering crucial insights for maritime logistics and supply chain management.
 
+#### Static Demo
+
+[Static Demo](https://sagehourihan.github.io/clermont-demo/index.html)
+
 ## Table of Contents
 
 1. [Current Status](#current-status)
