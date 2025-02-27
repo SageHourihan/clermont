@@ -1,14 +1,5 @@
-// Initialize the map
-var map = L.map('map');
-
-// Define the bounds of the bounding box using two corners (southwest and northeast).
-var bounds = [
-    [42.32707815, -83.2032273643204],  // Southwest corner
-    [42.18912815, -83.0412166356796]   // Northeast corner
-];
-
-// Set the map to fit within these bounds.
-map.fitBounds(bounds);
+// Initialize the map with a default center and zoom level
+var map = L.map('map').setView([42.258103, -83.122222], 11); // Detroit River area
 
 // Add the OpenStreetMap tile layer to the map
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -18,6 +9,15 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // Store markers in an array to manage them
 let markers = [];
+
+// Function to get current map bounds
+function getCurrentBounds() {
+    var bounds = map.getBounds();
+    return [
+        [bounds.getSouth(), bounds.getWest()], // Southwest corner
+        [bounds.getNorth(), bounds.getEast()]  // Northeast corner
+    ];
+}
 
 // Function to fetch weather data from Open-Meteo API
 function getWeatherData(lat, lng) {
@@ -48,23 +48,63 @@ $(document).ready(function() {
 
         // Use jQuery to update the coordinates div
         $('#coordinates').text('Latitude: ' + lat + ' | Longitude: ' + lng);
-
-        // Fetch the weather data for the center of the map
-        // getWeatherData(lat, lng);
     });
 
-    // getWeatherData
+    // Get initial weather data for the center of the map
+    var center = map.getCenter();
+    getWeatherData(center.lat, center.lng);
 
-    // Also fetch the weather data for the initial map view (center of the bounds)
-    var initialLat = (bounds[0][0] + bounds[1][0]) / 2;
-    var initialLng = (bounds[0][1] + bounds[1][1]) / 2;
-    getWeatherData(initialLat, initialLng);
+    // Update bounds and weather data when map moves
+    map.on('moveend', function() {
+        var bounds = getCurrentBounds();
+
+        // Optional: Display the current bounds (you can remove this in production)
+        if ($('#bounds-display').length === 0) {
+            $('body').append('<div id="bounds-display" style="position:fixed; bottom:10px; right:10px; z-index:1000; background:white; padding:5px; border-radius:5px;"></div>');
+        }
+
+        $('#bounds-display').html(
+            `SW: [${bounds[0][0].toFixed(6)}, ${bounds[0][1].toFixed(6)}]<br>` +
+            `NE: [${bounds[1][0].toFixed(6)}, ${bounds[1][1].toFixed(6)}]`
+        );
+
+        // Update weather for the new center
+        var center = map.getCenter();
+        getWeatherData(center.lat, center.lng);
+
+        // You might want to reload ship data based on new bounds
+        // loadShipDataForBounds(bounds);
+    });
 });
+
+// Function to load ship data based on current bounds
+// function loadShipDataForBounds(bounds) {
+//     // Assuming you have an API endpoint that accepts bounds parameters
+//     $.ajax({
+//         url: '../src/api/getShipsInBounds.php',
+//         type: 'GET',
+//         data: {
+//             south: bounds[0][0],
+//             west: bounds[0][1],
+//             north: bounds[1][0],
+//             east: bounds[1][1]
+//         },
+//         success: function(response) {
+//             try {
+//                 const data = JSON.parse(response);
+//                 plotShipData(data);
+//             } catch (error) {
+//                 console.log("Error processing data:", error);
+//             }
+//         },
+//         error: function(xhr, status, error){
+//             console.log("AJAX Error:", status, error);
+//         }
+//     });
+// }
 
 // Function to plot ships on the map
 function plotShipData(shipData) {
-    // console.log(shipData);
-
     // Clear the existing markers
     markers.forEach(marker => map.removeLayer(marker));
     markers = []; // Reset the markers array
@@ -172,10 +212,8 @@ function getNavStatus(status) {
 
 // get historical route data
 function getHistoricalRoute(mmsi) {
-
     var base_url = $(location).prop("origin");
     window.location.href = base_url + "/clermont/public/historical_route.php?mmsi=" + mmsi;
-    // console.log(base_url + "/clermont/public/historical_route.php?mmsi=" + mmsi);
 }
 
 // Expose the `plotShipData` function to the global scope for polling.js to call
