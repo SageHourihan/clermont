@@ -63,7 +63,7 @@ $(document).ready(function() {
 
 // Function to plot ships on the map
 function plotShipData(shipData) {
-    console.log(shipData);
+    // console.log(shipData);
 
     // Clear the existing markers
     markers.forEach(marker => map.removeLayer(marker));
@@ -175,7 +175,7 @@ function getHistoricalRoute(mmsi) {
 
     var base_url = $(location).prop("origin");
     window.location.href = base_url + "/clermont/public/historical_route.php?mmsi=" + mmsi;
-    console.log(base_url + "/clermont/public/historical_route.php?mmsi=" + mmsi);
+    // console.log(base_url + "/clermont/public/historical_route.php?mmsi=" + mmsi);
 }
 
 // Expose the `plotShipData` function to the global scope for polling.js to call
