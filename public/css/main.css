@@ -115,3 +115,26 @@ html, body {
     margin-top: 0;
     color: #007bff;
 }
+
+#route_btn {
+    background-color: #3B3D54; /* Clermont's primary color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#route_btn:hover {
+    background-color: #2c2e42; /* Darker shade for hover effect */
+    transform: scale(1.05);
+}
+
+#route_btn:active {
+    background-color: #1f202f; /* Even darker when clicked */
+    transform: scale(0.95);
+}

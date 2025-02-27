@@ -137,8 +137,15 @@ function displayShipDetails(data) {
         <p><strong>Heading:</strong> ${data.Message.PositionReport.TrueHeading}&deg;</p>
         <p><strong>Navigation Status:</strong> ${getNavStatus(data.Message.PositionReport.NavigationalStatus)}</p>
         <p><strong>Last Update:</strong> ${data.MetaData.time_utc}</p>
+        <button id='route_btn' data-mmsi=${data.MetaData.MMSI}>Get Route</button>
     `);
     panel.fadeIn(); // Show the panel with animation
+
+    // Attach click event to the button (use event delegation to avoid issues)
+    $('#route_btn').off('click').on('click', function() {
+        let mmsi = $(this).data('mmsi');
+        getHistoricalRoute(mmsi);
+    });
 }
 
 // Close button functionality
@@ -163,6 +170,13 @@ function getNavStatus(status) {
     return statusMap[status] || "Unknown";
 }
 
+// get historical route data
+function getHistoricalRoute(mmsi) {
+
+    var base_url = $(location).prop("origin");
+    window.location.href = base_url + "/clermont/public/historical_route.php?mmsi=" + mmsi;
+    console.log(base_url + "/clermont/public/historical_route.php?mmsi=" + mmsi);
+}
 
 // Expose the `plotShipData` function to the global scope for polling.js to call
 window.plotShipData = plotShipData;

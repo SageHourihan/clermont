@@ -5,7 +5,7 @@ function fetchAndPlotShips() {
         dataType: 'json',  // Automatically parses JSON
         success: function(data) {
             try {
-                console.log("Raw response:", data); // Debug response
+                // console.log("Raw response:", data); // Debug response
 
                 // Check if data is an array
                 if (!Array.isArray(data)) {
@@ -17,7 +17,7 @@ function fetchAndPlotShips() {
                 let ships = data.map(item => {
                     let shipData = {};
 
-                    console.log("Processing item:", item); // Debug each item
+                    // console.log("Processing item:", item); // Debug each item
 
                     // Check for PositionReport and extract relevant data
                     if (item.Message?.PositionReport) {
