@@ -13,6 +13,15 @@ $dotenv->load();
 // Create an instance of CacheService
 $cacheService = new CacheService();
 
+$shipsData = $cacheService->getAllShipsData();
 
+foreach ($shipsData as $ship => $message) {
+    $metaData = json_decode($message)->MetaData ?? null;
+    if ($metaData) {
+        $mmsi = $metaData->MMSI;
+        $lattitude = $metaData->Latitude;
+        $longitude = $metaData->Longitude;
+    }
+}
 
 

@@ -13,28 +13,41 @@ class CacheService
         $this->memcache->addServer('127.0.0.1', 11211);
     }
 
-    // store raw ship data
+    // Store raw ship data
     public function storeShipData($mmsi, $data)
     {
-        $this->memcache->set("ship:$mmsi", $data, 3600);// Cache for 1 hour
+        $this->memcache->set("ship:$mmsi", $data, 3600); // Cache for 1 hour
     }
 
-    // store active ships for plotting
+    // Store active ships for plotting
     public function storeActiveShipsList($activeShips)
     {
         $this->memcache->set("ships:active", $activeShips, 600); // Cache for 10 minutes
     }
 
-    // get a list of the active ships
+    // Get a list of the active ships
     public function getActiveShips()
     {
-        return $this->memcache->get("ships:active");
+        return $this->memcache->get("ships:active") ?: [];
     }
 
-    // get stored raw ship data by mmsi
-    public function getShipData($mmsi){
+    // Get stored raw ship data by MMSI
+    public function getShipData($mmsi)
+    {
         return $this->memcache->get("ship:$mmsi");
     }
 
-    //TODO: create get all ships
+    // Get all stored ship data
+    public function getAllShipsData()
+    {
+        $activeShips = $this->getActiveShips();
+        if (empty($activeShips)) {
+            return [];
+        }
+
+        $shipKeys = array_map(fn($mmsi) => "ship:$mmsi", $activeShips);
+        $shipsData = $this->memcache->getMulti($shipKeys);
+
+        return $shipsData ?: [];
+    }
 }
