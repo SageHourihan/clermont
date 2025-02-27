@@ -9,10 +9,11 @@ Clermont is a sophisticated maritime vessel tracking platform. The system provid
 1. [Current Status](#current-status)
 2. [Features](#features)
 3. [System Architecture](#system-architecture)
-4. [Installation](#installation)
-5. [Usage Guide](#usage-guide)
-6. [Development Roadmap](#development-roadmap)
-7. [License](#license)
+4. [Requirements](#requirements)
+5. [Installation](#installation)
+6. [Usage Guide](#usage-guide)
+7. [Development Roadmap](#development-roadmap)
+8. [License](#license)
 
 ## Current Status
 
@@ -49,11 +50,32 @@ Clermont is currently in active development, with core tracking functionality im
 
 Clermont employs a modern LAMP stack architecture with additional technologies for real-time capabilities:
 
-- Backend: PHP with MongoDB and MySQL
+- Backend: PHP with MySQL
 - Frontend: JavaScript with Leaflet.js
 - Real-time: WebSocket connections
 - Caching: Memcached
 - APIs: AISStream, OpenWeather
+
+## Requirements
+
+To run Clermont Tracker locally, you'll need the following:
+
+-   **Web Server:**
+    -   Apache or Nginx
+-   **PHP:**
+    -   PHP 7.4 or higher
+    -   PHP extensions:
+        -   PDO MySQL extension
+        -   Memcached extension
+        -   GD extension (optional, for image processing if needed)
+-   **MySQL:**
+    -   MySQL 5.7 or higher (or MariaDB equivalent)
+-   **Composer:**
+    -   Composer for dependency management
+-   **Memcached:**
+    -   Memcached server installed and running
+-   **.env file:**
+    -   Environment variables configured for database and Memcached access.
 
 ## Installation
 
@@ -87,9 +109,10 @@ Clermont employs a modern LAMP stack architecture with additional technologies f
 
     -   Ensure the `config/constants.php` file correctly defines the `PROJECT_ROOT` constant.
 
-5.  **Configure database connection:**
+5.  **Configure database and Memcached connection:**
 
-    -   The `config/db.php` file uses the `Dotenv` library to load environment variables from the `.env` file. Make sure your database credentials are correctly set in the `.env` file.
+    -   The `config/db.php` file uses the `Dotenv` library to load environment variables from the `.env` file. Make sure your database and Memcached credentials are correctly set in the `.env` file.
+    -   Ensure Memcached is installed and running on your server.
 
 6.  **Set up web server:**
 
