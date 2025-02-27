@@ -23,9 +23,9 @@ cache/
 # composer.lock
 
 # Ignore database dumps (if any)
-*.sql
-*.sqlite
-*.db
+# *.sql
+# *.sqlite
+# *.db
 
 # Ignore deployment-related files
 node_modules/
