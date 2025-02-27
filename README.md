@@ -9,9 +9,10 @@ Clermont is a sophisticated maritime vessel tracking platform. The system provid
 1. [Current Status](#current-status)
 2. [Features](#features)
 3. [System Architecture](#system-architecture)
-4. [Usage Guide](#usage-guide)
-5. [Development Roadmap](#development-roadmap)
-6. [License](#license)
+4. [Installation](#installation)
+5. [Usage Guide](#usage-guide)
+6. [Development Roadmap](#development-roadmap)
+7. [License](#license)
 
 ## Current Status
 
@@ -54,15 +55,57 @@ Clermont employs a modern LAMP stack architecture with additional technologies f
 - Caching: Memcached
 - APIs: AISStream, OpenWeather
 
+## Installation
+
+1.  **Clone the repository:**
+
+    ```bash
+    git clone <repository_url>
+    cd clermont
+    ```
+
+2.  **Install Composer dependencies:**
+
+    ```bash
+    composer install
+    ```
+
+3.  **Set up the database:**
+
+    -   Create a new MySQL database.
+    -   Import the provided database schema (if available) or create the necessary tables.
+    -   Create a `.env` file in the project root directory with your database credentials and other environment variables. Example:
+
+        ```
+        DB_HOST=your_database_host
+        DB_NAME=your_database_name
+        DB_USER=your_database_user
+        DB_PASS=your_database_password
+        ```
+
+4.  **Configure constants:**
+
+    -   Ensure the `config/constants.php` file correctly defines the `PROJECT_ROOT` constant.
+
+5.  **Configure database connection:**
+
+    -   The `config/db.php` file uses the `Dotenv` library to load environment variables from the `.env` file. Make sure your database credentials are correctly set in the `.env` file.
+
+6.  **Set up web server:**
+
+    -   Configure your web server (e.g., Apache, Nginx) to point the document root to the `public` directory.
+    -   Ensure that the web server has write permissions to the necessary directories (e.g., for logs or uploaded files, if any).
+
+7.  **Access the application:**
+
+    -   Open your web browser and navigate to the project's URL.
+
 ## Usage Guide
 
-### Tracking Interface
-
-1. Access the platform through your web browser
-2. The map automatically centers on the Port of Detroit
-3. Ship markers appear in real-time as vessels are detected
-4. Hover over markers for basic vessel information
-5. Click markers for detailed ship data
+-   **Real-time tracking:** The `index.php` page displays the real-time location of active ships on a map.
+-   **Historical route:** The `historical_route.php` page displays the historical route of a selected vessel. You can access this page by clicking on a vessel on the map and then clicking the "Get Route" button.
+-   **About:** The `about.php` page provides information about the Clermont Tracker project.
+-   **Contact:** The contact form is located at the contact button in the nav bar.
 
 ### Weather Information
 
@@ -73,7 +116,7 @@ Clermont employs a modern LAMP stack architecture with additional technologies f
 
 ## Development Roadmap
 
-Clermont is following a structured development plan to expand its capabilities. View our detailed [Development Roadmap](ROADMAP.md) for information about upcoming features and enhancements.
+Clermont is following a structured development plan to expand its capabilities. View our detailed [Development Roadmap](roadmap.md) for information about upcoming features and enhancements.
 
 Key upcoming developments include:
 
