@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../../vendor/autoload.php';
-require_once __DIR__ . '/../../config/constants.php';  // Load the constant
+require_once __DIR__ . '/../../config/constants.php';  // Load the constants
 
 use Dotenv\Dotenv;
 use Services\WebSocketClient;
@@ -20,23 +20,50 @@ $webSocketClient = new WebSocketClient($apiKey);
 $aisDataService = new AISDataService();
 $cacheService = new CacheService();
 
-// Define the message to send to AIS Stream
+// Function to get the latest bounding box from cache
+function getLatestBoundingBox($cacheService) {
+    $updatedBounds = $cacheService->fetch("map_bounds");
+    if ($updatedBounds) {
+        return json_decode($updatedBounds, true);
+    }
+    // Default bounding box if no updates are found
+    return [[42.32707815, -83.2032273643204], [42.18912815, -83.0412166356796]];
+}
+
+// Send initial bounding box message
+$boundingBoxes = getLatestBoundingBox($cacheService);
 $message = json_encode([
     "APIKey" => $apiKey,
-    "BoundingBoxes" => [
-        [[42.32707815, -83.2032273643204], [42.18912815, -83.0412166356796]]
-    ]
+    "BoundingBoxes" => [$boundingBoxes]
 ]);
 
-// Send the message to the WebSocket
 $webSocketClient->sendMessage($message);
+echo "Sent initial bounding box to WebSocket.\n";
 
 // Listen for incoming messages
 while (true) {
     try {
+        // Check if bounds have changed
+        $newBoundingBoxes = getLatestBoundingBox($cacheService);
+        if ($newBoundingBoxes !== $boundingBoxes) {
+            $boundingBoxes = $newBoundingBoxes; // Update stored bounds
+
+            // Construct and send the updated WebSocket message
+            $message = json_encode([
+                "APIKey" => $apiKey,
+                "BoundingBoxes" => [$boundingBoxes]
+            ]);
+
+            // Log the sent message
+            echo "Sending WebSocket message: " . $message . "\n";
+            
+            $webSocketClient->sendMessage($message);
+            echo "Sent updated bounds to WebSocket: " . json_encode($boundingBoxes) . "\n\n";
+        }
+
         // Receive a message from the WebSocket server
         $incomingMessage = $webSocketClient->receiveMessage();
-        echo "Received message: $incomingMessage\n";
+        // echo "Received message: $incomingMessage\n";
 
         // Process the incoming message
         $processedData = $aisDataService->processIncomingData($incomingMessage);
@@ -61,8 +88,11 @@ while (true) {
                 $cacheService->storeActiveShipsList($activeShips); // Store the updated active ships list
             }
 
-            echo "Stored data in memcache\n";
+            echo "Stored data in Memcache for MMSI: $mmsi\n";
         }
+
+        // Sleep to prevent excessive CPU usage
+        sleep(3);
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }

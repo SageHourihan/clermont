@@ -50,4 +50,16 @@ class CacheService
 
         return $shipsData ?: [];
     }
+
+    // store new data in memcached
+    public function store($key, $value)
+    {
+        return $this->memcache->set($key, $value, 3600); // Cache for 1 hour
+    }
+
+    // fetch data from memcached by key
+    public function fetch($key)
+    {
+        return $this->memcache->get($key);
+    }
 }

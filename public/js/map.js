@@ -58,6 +58,24 @@ $(document).ready(function() {
     map.on('moveend', function() {
         var bounds = getCurrentBounds();
 
+        // Send updated bounds to the server
+        $.ajax({
+            url: '../src/api/updateBounds.php',
+            type: 'POST',
+            data: {
+                south: bounds[0][0],
+                west: bounds[0][1],
+                north: bounds[1][0],
+                east: bounds[1][1]
+            },
+            success: function(response) {
+                console.log("Updated bounds:", response);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error updating bounds:", error);
+            }
+        });
+
         // Optional: Display the current bounds (you can remove this in production)
         if ($('#bounds-display').length === 0) {
             $('body').append('<div id="bounds-display" style="position:fixed; bottom:10px; right:10px; z-index:1000; background:white; padding:5px; border-radius:5px;"></div>');
@@ -76,32 +94,6 @@ $(document).ready(function() {
         // loadShipDataForBounds(bounds);
     });
 });
-
-// Function to load ship data based on current bounds
-// function loadShipDataForBounds(bounds) {
-//     // Assuming you have an API endpoint that accepts bounds parameters
-//     $.ajax({
-//         url: '../src/api/getShipsInBounds.php',
-//         type: 'GET',
-//         data: {
-//             south: bounds[0][0],
-//             west: bounds[0][1],
-//             north: bounds[1][0],
-//             east: bounds[1][1]
-//         },
-//         success: function(response) {
-//             try {
-//                 const data = JSON.parse(response);
-//                 plotShipData(data);
-//             } catch (error) {
-//                 console.log("Error processing data:", error);
-//             }
-//         },
-//         error: function(xhr, status, error){
-//             console.log("AJAX Error:", status, error);
-//         }
-//     });
-// }
 
 // Function to plot ships on the map
 function plotShipData(shipData) {
