@@ -21,17 +21,12 @@
 .ascii-map {
   flex: 1;
   padding: var(--panel-padding);
-  font-size: 10px;
+  font-size: 11px;
   line-height: 1.3;
-  color: #1E1600;
+  color: #A07800;
   overflow: hidden;
   white-space: pre;
   transform-origin: top left;
-}
-
-/* Land characters */
-.ascii-map .land {
-  color: #A07800;
 }
 
 /* Event blips */
