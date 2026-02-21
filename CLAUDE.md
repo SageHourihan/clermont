@@ -120,8 +120,7 @@ interface Event {
 
 ```
 clermont/
-  agents/          # Engineering agent prompt files
-    docs.md        # Docs agent — README, CLAUDE.md, contributing guides
+  agents/          # Engineering agent prompt files (see below)
   src/             # Server source (TypeScript)
     feeds/         # One module per data source
     routes/        # Express API routes
@@ -167,15 +166,12 @@ USGS_FEED_URL=https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.
 ```
 [x] Repo initialized
 [x] Stack decided
-[x] Project scaffolded (package.json, tsconfig, folder structure)
-[x] Amber UI shell (scanlines, amber/near-black, monospace, header, statusbar)
-[x] ASCII world map panel (55% left — clickable, expands to Leaflet overlay)
-[x] Feed panel layout (GEO / ENV / MKT / INF stacked right)
-[x] Leaflet interactive map overlay (fullscreen, ESC to close)
-[x] Mock data layer (60s poll interval, swap for API when backend ready)
+[ ] Project scaffolded (package.json, tsconfig, folder structure)
 [ ] Express server running
 [ ] PostgreSQL + Prisma connected
 [ ] First data feed (ENV — USGS earthquakes)
+[ ] Leaflet map rendering
+[ ] Amber UI shell
 [ ] PM2 + Nginx configured
 [ ] Public deployment
 ```

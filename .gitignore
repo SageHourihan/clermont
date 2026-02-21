@@ -47,9 +47,6 @@ Thumbs.db
 *.key
 secrets/
 
-# Screenshots (local only — drop files here for Claude to reference)
-screenshots/
-
 # Claude
 # CLAUDE.md
 # .claude/*

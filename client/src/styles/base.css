@@ -201,12 +201,6 @@ a:hover {
   align-items: center;
 }
 
-.statusbar__right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
 .feed-indicator {
   padding: 0 8px;
 }
@@ -215,116 +209,10 @@ a:hover {
   color: var(--text-muted);
 }
 
-.statusbar__kb--hidden {
-  display: none;
-}
-
 /* ── Feed grid (right side) ──────────────────────────────── */
 
 .feed-grid {
   display: grid;
-  grid-template-rows: auto 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
   overflow: hidden;
-}
-
-/* ── Keybinding cheatsheet overlay ───────────────────────── */
-
-.kb-cheatsheet {
-  position: fixed;
-  inset: 0;
-  z-index: 20000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(13, 13, 13, 0.88);
-}
-
-.kb-cheatsheet--hidden {
-  display: none;
-}
-
-.kb-cheatsheet__inner {
-  border: 1px solid var(--amber-dim);
-  background: var(--bg-surface);
-  padding: 24px 32px;
-  min-width: 360px;
-  font-family: var(--font-mono);
-}
-
-.kb-cheatsheet__title {
-  font-size: 12px;
-  color: var(--amber-primary);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  margin-bottom: 20px;
-  border-bottom: 1px solid var(--amber-dim);
-  padding-bottom: 10px;
-}
-
-.kb-cheatsheet__grid {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 8px 20px;
-  align-items: center;
-}
-
-.kb-key {
-  font-size: 11px;
-  color: var(--amber-bright);
-  letter-spacing: 0.05em;
-  white-space: nowrap;
-}
-
-.kb-desc {
-  font-size: 11px;
-  color: var(--text-secondary);
-  letter-spacing: 0.05em;
-}
-
-.kb-cheatsheet__footer {
-  margin-top: 20px;
-  padding-top: 10px;
-  border-top: 1px solid var(--text-muted);
-  font-size: 10px;
-  color: var(--text-muted);
-  letter-spacing: 0.1em;
-  text-align: center;
-}
-
-/* ── Command line overlay ────────────────────────────────── */
-
-.cmd-overlay {
-  position: fixed;
-  bottom: 28px; /* sit just above statusbar */
-  left: 0;
-  right: 0;
-  z-index: 15000;
-  display: flex;
-  align-items: center;
-  padding: 6px 14px;
-  background: var(--bg-elevated);
-  border-top: 1px solid var(--amber-dim);
-  font-family: var(--font-mono);
-  font-size: 13px;
-}
-
-.cmd-overlay--hidden {
-  display: none;
-}
-
-.cmd-prompt {
-  color: var(--amber-primary);
-  flex-shrink: 0;
-}
-
-.cmd-input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--amber-primary);
-  font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: 0.05em;
-  caret-color: var(--amber-primary);
 }

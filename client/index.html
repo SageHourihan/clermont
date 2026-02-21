@@ -24,36 +24,27 @@
       <!-- Right: Feed panels (70% width) -->
       <div class="feed-grid">
 
-        <!-- Severity filter strip -->
-        <div id="filter-strip" class="filter-strip">
-          <span class="filter-strip__label">FILTER:</span>
-          <button class="filter-badge filter-badge--critical filter-badge--active" data-severity="CRITICAL">CRITICAL</button>
-          <button class="filter-badge filter-badge--high filter-badge--active" data-severity="HIGH">HIGH</button>
-          <button class="filter-badge filter-badge--medium filter-badge--active" data-severity="MEDIUM">MEDIUM</button>
-          <button class="filter-badge filter-badge--low filter-badge--active" data-severity="LOW">LOW</button>
-        </div>
-
         <!-- GEO feed — ONLINE -->
-        <section id="geo-panel" class="panel panel--feed">
-          <div class="panel__label panel__label--toggle" data-feed="GEO">[GEO] GEOPOLITICAL FEED</div>
+        <section class="panel panel--feed">
+          <div class="panel__label">[GEO] GEOPOLITICAL FEED</div>
           <div id="geo-feed" class="feed-list"></div>
         </section>
 
         <!-- ENV feed -->
-        <section id="env-panel" class="panel panel--feed">
-          <div class="panel__label panel__label--toggle" data-feed="ENV">[ENV] NATURAL DISASTERS</div>
+        <section class="panel panel--feed">
+          <div class="panel__label">[ENV] NATURAL DISASTERS</div>
           <div id="env-feed" class="feed-list"></div>
         </section>
 
         <!-- MKT feed -->
-        <section id="mkt-panel" class="panel panel--feed">
-          <div class="panel__label panel__label--toggle" data-feed="MKT">[MKT] FINANCIAL MARKETS</div>
+        <section class="panel panel--feed">
+          <div class="panel__label">[MKT] FINANCIAL MARKETS</div>
           <div id="mkt-feed" class="feed-list"></div>
         </section>
 
         <!-- INF feed -->
-        <section id="inf-panel" class="panel panel--feed">
-          <div class="panel__label panel__label--toggle" data-feed="INF">[INF] NEWS &amp; MEDIA</div>
+        <section class="panel panel--feed">
+          <div class="panel__label">[INF] NEWS &amp; MEDIA</div>
           <div id="inf-feed" class="feed-list"></div>
         </section>
 
@@ -71,27 +62,6 @@
       <button id="map-close" class="map-close" aria-label="Close map">[ESC] CLOSE MAP</button>
     </div>
     <div id="leaflet-map" class="leaflet-map-container"></div>
-  </div>
-
-  <!-- Keybinding cheatsheet overlay — hidden by default -->
-  <div id="kb-cheatsheet" class="kb-cheatsheet kb-cheatsheet--hidden" role="dialog" aria-modal="true">
-    <div class="kb-cheatsheet__inner">
-      <div class="kb-cheatsheet__title">// KEYBOARD SHORTCUTS</div>
-      <div class="kb-cheatsheet__grid">
-        <div class="kb-key">j / k</div><div class="kb-desc">Navigate events</div>
-        <div class="kb-key">Tab / Shift+Tab</div><div class="kb-desc">Cycle feed panels</div>
-        <div class="kb-key">Enter</div><div class="kb-desc">Open event on map</div>
-        <div class="kb-key">Esc</div><div class="kb-desc">Clear selection / close</div>
-        <div class="kb-key">/</div><div class="kb-desc">Open command line</div>
-        <div class="kb-key">?</div><div class="kb-desc">Show this cheatsheet</div>
-      </div>
-      <div class="kb-cheatsheet__footer">PRESS [ESC] OR [?] TO CLOSE</div>
-    </div>
-  </div>
-
-  <!-- Command line overlay -->
-  <div id="cmd-overlay" class="cmd-overlay cmd-overlay--hidden">
-    <span class="cmd-prompt">&gt;&nbsp;</span><input id="cmd-input" class="cmd-input" type="text" autocomplete="off" spellcheck="false" />
   </div>
 
   <script type="module" src="/src/main.ts"></script>
