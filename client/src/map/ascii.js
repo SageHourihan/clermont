@@ -180,6 +180,32 @@ export function renderAsciiMap(events) {
 // ── Public API ───────────────────────────────────────────────────────────────
 export function initAsciiMap(container, events, onExpand) {
     container.innerHTML = renderAsciiMap(events);
+    function scaleToFit() {
+        const parent = container.parentElement;
+        if (!parent)
+            return;
+        // Temporarily size to content so scrollWidth reflects the true text dimensions,
+        // not the flex-stretched width (which would give scale=1 and clip the map).
+        container.style.transform = 'none';
+        container.style.width = 'max-content';
+        container.style.height = 'max-content';
+        const naturalW = container.scrollWidth;
+        const naturalH = container.scrollHeight;
+        container.style.width = '';
+        container.style.height = '';
+        const availW = parent.clientWidth;
+        const availH = parent.clientHeight;
+        if (naturalW === 0 || naturalH === 0)
+            return;
+        const scale = Math.min(availW / naturalW, availH / naturalH, 1);
+        container.style.transform = scale < 1 ? `scale(${scale})` : 'none';
+    }
+    requestAnimationFrame(scaleToFit);
+    const mapParent = container.parentElement;
+    if (mapParent) {
+        const ro = new ResizeObserver(scaleToFit);
+        ro.observe(mapParent);
+    }
     const panel = container.closest('[role="button"]');
     if (panel) {
         panel.addEventListener('click', onExpand);

@@ -13,22 +13,25 @@ const IDS = {
     mapOverlay: 'map-overlay',
     leafletMap: 'leaflet-map',
     geoFeed: 'geo-feed',
+    envFeed: 'env-feed',
+    mktFeed: 'mkt-feed',
+    infFeed: 'inf-feed',
     header: 'header',
     statusbar: 'statusbar',
 };
 let currentEvents = [];
 // ── Data layer ────────────────────────────────────────────
-// MOCK MODE — swap for the fetch block below when the backend is ready
+// MOCK MODE — swap for fetch calls below when the backend is ready
 async function fetchEvents() {
-    return getMockEvents('GEO');
+    return getMockEvents();
     // LIVE MODE (uncomment when backend is ready):
     // try {
-    //   const res = await fetch('/api/events?feed=GEO')
+    //   const res = await fetch('/api/events')
     //   if (!res.ok) throw new Error(`HTTP ${res.status}`)
     //   return res.json()
     // } catch (err) {
     //   console.warn('[CLERMONT] API fetch failed, using mock data', err)
-    //   return getMockEvents('GEO')
+    //   return getMockEvents()
     // }
 }
 // ── Refresh cycle ─────────────────────────────────────────
@@ -40,10 +43,18 @@ async function refresh() {
     const asciiMap = document.getElementById(IDS.asciiMap);
     if (asciiMap)
         updateAsciiMap(asciiMap, events);
-    renderFeed(IDS.geoFeed, events);
-    const feedStates = INITIAL_FEED_STATES.map(s => s.feed === 'GEO'
-        ? { ...s, lastUpdate: now, eventCount: events.length }
-        : s);
+    const geoEvents = events.filter(e => e.feed === 'GEO');
+    const envEvents = events.filter(e => e.feed === 'ENV');
+    const mktEvents = events.filter(e => e.feed === 'MKT');
+    const infEvents = events.filter(e => e.feed === 'INF');
+    renderFeed(IDS.geoFeed, geoEvents);
+    renderFeed(IDS.envFeed, envEvents);
+    renderFeed(IDS.mktFeed, mktEvents);
+    renderFeed(IDS.infFeed, infEvents);
+    const feedStates = INITIAL_FEED_STATES.map(s => {
+        const count = events.filter(e => e.feed === s.feed).length;
+        return count > 0 ? { ...s, status: 'ONLINE', lastUpdate: now, eventCount: count } : s;
+    });
     updateStatusBar(IDS.statusbar, feedStates);
     refreshMapMarkers(events);
 }
