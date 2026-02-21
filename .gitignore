@@ -1,0 +1,47 @@
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+vendor/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Build output
+dist/
+build/
+out/
+.next/
+.nuxt/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Cache
+.cache/
+.parcel-cache/
+*.tmp
+
+# API keys / secrets (belt and suspenders)
+*.pem
+*.key
+secrets/
+
+# Claude
+CLAUDE.md
+.claude/*
