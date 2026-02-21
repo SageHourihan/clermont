@@ -44,6 +44,8 @@ export function createEventMarker(event: Event): L.Marker {
     maxWidth: 300,
     minWidth: 200,
   })
+  // Tag the marker so flyToEvent can find it by event ID
+  ;(marker as unknown as Record<string, unknown>)._eventId = event.id
   return marker
 }
 

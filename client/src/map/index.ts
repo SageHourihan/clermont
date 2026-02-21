@@ -11,12 +11,18 @@ interface MapState {
   map: L.Map | null
   markerLayer: L.LayerGroup | null
   isVisible: boolean
+  containerId: string
+  overlayId: string
+  lastEvents: Event[]
 }
 
 const state: MapState = {
   map: null,
   markerLayer: null,
   isVisible: false,
+  containerId: '',
+  overlayId: '',
+  lastEvents: [],
 }
 
 function initLeafletMap(containerId: string): L.Map {
@@ -41,6 +47,11 @@ function initLeafletMap(containerId: string): L.Map {
 export function openMap(containerId: string, overlayId: string, events: Event[]): void {
   const overlay = document.getElementById(overlayId)
   if (!overlay) return
+
+  // Cache IDs so flyToEvent can reopen without params
+  state.containerId = containerId
+  state.overlayId = overlayId
+  state.lastEvents = events
 
   // Lazy init: create the map on first open only
   if (!state.map) {
@@ -83,6 +94,30 @@ export function refreshMapMarkers(events: Event[]): void {
   }
   state.markerLayer = buildMarkerLayer(events)
   state.markerLayer.addTo(state.map)
+}
+
+// Open map and fly to a specific event, opening its popup
+export function flyToEvent(event: Event): void {
+  if (!state.isVisible) {
+    openMap(state.containerId, state.overlayId, state.lastEvents)
+  }
+  // Short delay for map to finish rendering/invalidating before flying
+  setTimeout(() => {
+    state.map?.flyTo([event.lat, event.lng], 5, { animate: true, duration: 0.8 })
+    state.markerLayer?.eachLayer((layer) => {
+      const marker = layer as L.Marker
+      if ((marker as unknown as Record<string, unknown>)._eventId === event.id) {
+        marker.openPopup()
+      }
+    })
+  }, 200)
+}
+
+// Pre-register the map container/overlay IDs so flyToEvent works
+// before the map has ever been opened. Call during app init.
+export function configureMap(containerId: string, overlayId: string): void {
+  state.containerId = containerId
+  state.overlayId = overlayId
 }
 
 // Wire up close controls. Call once during app init.

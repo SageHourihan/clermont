@@ -19,6 +19,36 @@ Track geopolitical events. Watch markets breathe. Follow the storm. Read the sig
 
 ---
 
+## PREVIEW
+
+![Clermont dashboard](docs/screenshot.png)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ CLERMONT WORLD SITUATION MONITOR_          SYS: NOMINAL // LAST UPDATE: ...  │
+├──────────────────────────────────────┬──────────────────────────────────────┤
+│                                      │ FILTER: [CRITICAL] [HIGH] [MEDIUM] [LOW]│
+│                                      ├──────────────────────────────────────┤
+│         ASCII WORLD MAP              │ [GEO] GEOPOLITICAL FEED               │
+│                                      │  ● Ceasefire talks stall...    [HIGH] │
+│    · · · · ·█·· · · · · · ·█· ·     │  ● Sanctions expanded...       [MED]  │
+│   ···█████·····████████·····█··      ├──────────────────────────────────────┤
+│    ·····████████···· ·······         │ [ENV] NATURAL DISASTERS               │
+│        ·····█████·······            │  ● 6.2M earthquake, Japan     [HIGH] │
+│          Click to expand →           │  ● Cat-4 storm track update   [CRIT] │
+│                                      ├──────────────────────────────────────┤
+│                                      │ [MKT] FINANCIAL MARKETS               │
+│                                      │  ● USD/JPY hits 6-month low   [MED]  │
+│                                      ├──────────────────────────────────────┤
+│                                      │ [INF] NEWS & MEDIA                    │
+│                                      │  ● Press freedom index drops  [HIGH] │
+├──────────────────────────────────────┴──────────────────────────────────────┤
+│ [GEO]: ONLINE (12) | [ENV]: ONLINE (8) | [MKT]: PLANNED | [INF]: PLANNED    │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 ## WHAT WE WATCH
 
 ```
@@ -42,12 +72,42 @@ Track geopolitical events. Watch markets breathe. Follow the storm. Read the sig
 Clermont ships in two forms. Same data. Same aesthetic. Two environments.
 
 ### `[WEB]` Browser Interface
-A full web application with live-updating panels, global map overlays, and event feeds. Built for anyone with a browser. Warm amber on dark. Feels like a command center. Runs like a dashboard.
+A full web application with live-updating panels, a global ASCII map, and event feeds. Built for anyone with a browser. Warm amber on dark. Feels like a command center. Runs like a dashboard.
+
+- Click any event row to fly the map to that location and open its signal detail
+- Toggle feeds by clicking any `[GEO]` / `[ENV]` / `[MKT]` / `[INF]` panel header
+- Filter by severity using the `FILTER:` strip above the panels
+- CRITICAL events flash the panel border on arrival
 
 > **This is the primary interface and current development focus.**
 
+```
+// FOR TERMINAL JOCKEYS
+
+j / k ......... navigate events       / ............ open command line
+Tab ........... cycle feed panels     ? ............ show keybinding list
+Enter ......... open event on map     Esc .......... clear / close
+```
+
 ### `[TUI]` Terminal Interface
 A native terminal UI for those who live in the command line. Same data, same vibe — rendered in your terminal. Keyboard-driven. Fast. No mouse required.
+
+> Planned. Not yet built.
+
+---
+
+## QUICK START
+
+Requires Node.js (via nvm) and npm.
+
+```sh
+cd client
+npm install
+npm run dev
+# Open http://localhost:5173
+```
+
+The dashboard loads with mock data. Real data feeds require the backend (see CONTRIBUTING).
 
 ---
 
@@ -72,13 +132,25 @@ PUBLIC FIRST ...... Built for anyone, not just analysts. If a curious person
 ## STATUS
 
 ```
-[ ] Web interface ............. IN PROGRESS
-[ ] Data pipeline ............. PLANNED
-[ ] Geopolitical feed ......... PLANNED
-[ ] Natural disaster feed ..... PLANNED
-[ ] Market feed ............... PLANNED
-[ ] News aggregator ........... PLANNED
-[ ] TUI interface ............. PLANNED
+[x] Amber UI shell ............. COMPLETE
+[x] ASCII world map ............ COMPLETE
+[x] Feed panel layout .......... COMPLETE
+[x] Leaflet map overlay ........ COMPLETE
+[x] Mock data layer ............ COMPLETE
+[x] Feed + severity filters .... COMPLETE
+[x] Click-to-map event link .... COMPLETE
+[x] CRITICAL alert flash ....... COMPLETE
+[x] Keyboard navigation mode ... COMPLETE
+[x] Command line interface ..... COMPLETE
+[ ] Express backend ............ PLANNED
+[ ] PostgreSQL + Prisma ........ PLANNED
+[ ] Geopolitical feed .......... PLANNED
+[ ] Natural disaster feed ...... PLANNED
+[ ] Market feed ................ PLANNED
+[ ] News aggregator ............ PLANNED
+[ ] PM2 + Nginx ................ PLANNED
+[ ] Public deployment .......... PLANNED
+[ ] TUI interface .............. PLANNED
 ```
 
 ---

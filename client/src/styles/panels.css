@@ -2,6 +2,53 @@
    PANELS.CSS — Feed panel layouts, event rows, offline state
    ============================================================ */
 
+/* ── Severity filter strip ───────────────────────────────── */
+
+.filter-strip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-bottom: var(--border);
+  background: var(--bg-elevated);
+  flex-shrink: 0;
+}
+
+.filter-strip__label {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  margin-right: 2px;
+  flex-shrink: 0;
+}
+
+.filter-badge {
+  padding: 1px 5px;
+  border: 1px solid var(--text-muted);
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  background: transparent;
+  transition: background 0.1s;
+}
+
+.filter-badge:hover {
+  background: var(--amber-glow);
+}
+
+.filter-badge--active {
+  border-color: var(--amber-dim);
+  color: var(--amber-primary);
+}
+
+.filter-badge--critical.filter-badge--active { border-color: var(--severity-critical); color: var(--severity-critical); }
+.filter-badge--high.filter-badge--active     { border-color: var(--severity-high);     color: var(--severity-high); }
+.filter-badge--medium.filter-badge--active   { border-color: var(--severity-medium);   color: var(--severity-medium); }
+.filter-badge--low.filter-badge--active      { border-color: var(--severity-low);      color: var(--severity-low); }
+
 /* ── Feed panel layout ───────────────────────────────────── */
 
 .panel--feed {
@@ -32,10 +79,73 @@
   background: var(--amber-dim);
 }
 
+/* ── Muted panel state ───────────────────────────────────── */
+
+.panel--muted {
+  opacity: 0.35;
+}
+
+.panel--muted .panel__label--toggle {
+  opacity: 1; /* keep header legible */
+}
+
+.feed-muted-msg {
+  padding: var(--panel-padding);
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+}
+
+/* ── Clickable panel label ───────────────────────────────── */
+
+.panel__label--toggle {
+  cursor: pointer;
+}
+
+.panel__label--toggle:hover {
+  color: var(--amber-primary);
+  background: var(--bg-elevated);
+}
+
+/* ── CRITICAL alert flash ────────────────────────────────── */
+
+@keyframes critical-flash {
+  0%   { box-shadow: inset 0 0 0 1px var(--severity-critical); }
+  20%  { box-shadow: inset 0 0 0 2px var(--severity-critical); background: rgba(255, 34, 0, 0.07); }
+  40%  { box-shadow: inset 0 0 0 1px var(--severity-critical); background: transparent; }
+  60%  { box-shadow: inset 0 0 0 2px var(--severity-critical); background: rgba(255, 34, 0, 0.07); }
+  100% { box-shadow: none; background: transparent; }
+}
+
+.panel--alert {
+  animation: critical-flash 1.4s ease forwards;
+}
+
+.alert-banner {
+  font-size: 10px;
+  color: var(--severity-critical);
+  letter-spacing: 0.15em;
+  padding: 2px var(--panel-padding);
+  border-bottom: 1px solid var(--severity-critical);
+  background: rgba(255, 34, 0, 0.06);
+  animation: critical-flash 1.4s ease forwards;
+  flex-shrink: 0;
+}
+
 /* ── Event row ───────────────────────────────────────────── */
 
 .event-row {
   margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.event-row:hover {
+  background: rgba(255, 176, 0, 0.04);
+}
+
+.event-row:hover .event__title {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .event__header {
@@ -77,6 +187,31 @@
   color: var(--text-muted);
   margin-top: 6px;
   overflow: hidden;
+}
+
+/* ── Keyboard nav focused event ──────────────────────────── */
+
+.event-row--focused {
+  background: rgba(255, 176, 0, 0.08);
+  outline: 1px solid var(--amber-dim);
+  outline-offset: -1px;
+}
+
+.event-row--focused .event__title {
+  color: var(--amber-bright);
+}
+
+/* Subtle [KB] mode indicator in statusbar */
+.kb-active-indicator {
+  color: var(--amber-dim);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  animation: blink-kb 1.5s step-end infinite;
+}
+
+@keyframes blink-kb {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
 }
 
 /* ── Offline / planned panel state ───────────────────────── */
