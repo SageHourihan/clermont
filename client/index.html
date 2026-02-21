@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CLERMONT — WORLD SITUATION MONITOR</title>
+  <link rel="stylesheet" href="./node_modules/leaflet/dist/leaflet.css" />
+</head>
+<body>
+
+  <div id="app" class="scanlines">
+
+    <header id="header" class="header"></header>
+
+    <main class="main-grid">
+
+      <!-- Left: ASCII world map (30% width) -->
+      <section id="ascii-map-panel" class="panel panel--map" role="button"
+               tabindex="0" aria-label="Open interactive map">
+        <div class="panel__label">WORLD MAP // CLICK TO EXPAND</div>
+        <pre id="ascii-map" class="ascii-map" aria-hidden="true"></pre>
+      </section>
+
+      <!-- Right: Feed panels (70% width) -->
+      <div class="feed-grid">
+
+        <!-- GEO feed — ONLINE -->
+        <section class="panel panel--feed">
+          <div class="panel__label">[GEO] GEOPOLITICAL FEED</div>
+          <div id="geo-feed" class="feed-list"></div>
+        </section>
+
+        <!-- ENV — OFFLINE -->
+        <section class="panel panel--feed panel--offline">
+          <div class="panel__label">[ENV] NATURAL DISASTERS</div>
+          <div class="feed-offline">
+            <span class="offline-status">-- OFFLINE --</span>
+            <span class="offline-note">FEED PLANNED. USGS SEISMIC DATA.</span>
+          </div>
+        </section>
+
+        <!-- MKT — PLANNED -->
+        <section class="panel panel--feed panel--offline">
+          <div class="panel__label">[MKT] FINANCIAL MARKETS</div>
+          <div class="feed-offline">
+            <span class="offline-status">-- PLANNED --</span>
+            <span class="offline-note">MARKET DATA FEED NOT YET ACTIVE.</span>
+          </div>
+        </section>
+
+        <!-- INF — PLANNED -->
+        <section class="panel panel--feed panel--offline">
+          <div class="panel__label">[INF] NEWS &amp; MEDIA</div>
+          <div class="feed-offline">
+            <span class="offline-status">-- PLANNED --</span>
+            <span class="offline-note">NEWS AGGREGATOR NOT YET ACTIVE.</span>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <footer id="statusbar" class="statusbar"></footer>
+
+  </div>
+
+  <!-- Leaflet fullscreen overlay — hidden by default -->
+  <div id="map-overlay" class="map-overlay map-overlay--hidden" role="dialog"
+       aria-modal="true" aria-label="Interactive world map">
+    <div class="map-overlay__controls">
+      <button id="map-close" class="map-close" aria-label="Close map">[ESC] CLOSE MAP</button>
+    </div>
+    <div id="leaflet-map" class="leaflet-map-container"></div>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

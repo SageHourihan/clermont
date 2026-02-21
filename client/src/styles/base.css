@@ -1,0 +1,218 @@
+/* ============================================================
+   BASE.CSS — Variables, reset, global layout
+   Clermont World Situation Monitor
+   ============================================================ */
+
+:root {
+  --amber-primary:  #FFB000;
+  --amber-bright:   #FFC400;
+  --amber-dim:      #FF8C00;
+  --amber-glow:     rgba(255, 176, 0, 0.15);
+
+  --bg-base:        #0D0D0D;
+  --bg-surface:     #111111;
+  --bg-elevated:    #161616;
+
+  --text-primary:   #FFB000;
+  --text-secondary: #8A6A00;
+  --text-muted:     #4A3A00;
+
+  --severity-critical: #FF2200;
+  --severity-high:     #FF6600;
+  --severity-medium:   #FFB000;
+  --severity-low:      #4A7A00;
+
+  --font-mono: 'Courier New', 'Courier', 'Lucida Console', monospace;
+  --border: 1px solid var(--amber-dim);
+  --panel-padding: 12px;
+}
+
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+a {
+  color: var(--amber-primary);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--amber-bright);
+  text-decoration: underline;
+}
+
+/* No rounded corners anywhere */
+* {
+  border-radius: 0 !important;
+}
+
+/* ── Main layout grid ────────────────────────────────────── */
+
+#app {
+  display: grid;
+  grid-template-rows: 40px 1fr 28px;
+  grid-template-areas:
+    "header"
+    "main"
+    "statusbar";
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+}
+
+.header {
+  grid-area: header;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--panel-padding);
+  border-bottom: var(--border);
+  background: var(--bg-surface);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.main-grid {
+  grid-area: main;
+  display: grid;
+  grid-template-columns: 30% 70%;
+  overflow: hidden;
+}
+
+.statusbar {
+  grid-area: statusbar;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--panel-padding);
+  border-top: var(--border);
+  background: var(--bg-surface);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* ── Panel base styles ───────────────────────────────────── */
+
+.panel {
+  border-right: var(--border);
+  background: var(--bg-surface);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel__label {
+  padding: 4px var(--panel-padding);
+  border-bottom: var(--border);
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--bg-elevated);
+  flex-shrink: 0;
+}
+
+/* ── Scanline overlay ────────────────────────────────────── */
+
+.scanlines::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 9000;
+  animation: scanlines-drift 10s linear infinite;
+}
+
+@keyframes scanlines-drift {
+  0%   { background-position: 0 0; }
+  100% { background-position: 0 4px; }
+}
+
+/* ── Cursor ──────────────────────────────────────────────── */
+
+.cursor {
+  display: inline-block;
+  color: var(--amber-primary);
+}
+.cursor--off {
+  opacity: 0;
+}
+
+/* ── Severity colors ─────────────────────────────────────── */
+
+.severity--critical { color: var(--severity-critical); }
+.severity--high     { color: var(--severity-high); }
+.severity--medium   { color: var(--severity-medium); }
+.severity--low      { color: var(--severity-low); }
+
+/* ── Status indicator colors ─────────────────────────────── */
+
+.status--online   { color: var(--severity-low); }
+.status--offline  { color: var(--text-secondary); }
+.status--planned  { color: var(--text-muted); }
+.status--degraded { color: var(--severity-high); }
+
+/* ── Header specifics ────────────────────────────────────── */
+
+.header__title {
+  font-size: 14px;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--amber-primary);
+}
+
+.header__meta {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.header__divider {
+  color: var(--text-muted);
+}
+
+/* ── Status bar specifics ────────────────────────────────── */
+
+.statusbar__feeds {
+  display: flex;
+  align-items: center;
+}
+
+.feed-indicator {
+  padding: 0 8px;
+}
+
+.statusbar__sep {
+  color: var(--text-muted);
+}
+
+/* ── Feed grid (right side) ──────────────────────────────── */
+
+.feed-grid {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  overflow: hidden;
+}

@@ -1,0 +1,109 @@
+/* ============================================================
+   PANELS.CSS — Feed panel layouts, event rows, offline state
+   ============================================================ */
+
+/* ── Feed panel layout ───────────────────────────────────── */
+
+.panel--feed {
+  border-right: var(--border);
+  border-bottom: var(--border);
+  overflow: hidden;
+}
+
+.panel--feed:last-child {
+  border-bottom: none;
+}
+
+.feed-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--panel-padding);
+  scrollbar-width: thin;
+  scrollbar-color: var(--amber-dim) var(--bg-surface);
+}
+
+.feed-list::-webkit-scrollbar {
+  width: 4px;
+}
+.feed-list::-webkit-scrollbar-track {
+  background: var(--bg-surface);
+}
+.feed-list::-webkit-scrollbar-thumb {
+  background: var(--amber-dim);
+}
+
+/* ── Event row ───────────────────────────────────────────── */
+
+.event-row {
+  margin-bottom: 8px;
+}
+
+.event__header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+
+.event__feed {
+  color: var(--text-secondary);
+}
+
+.event__timestamp {
+  color: var(--text-muted);
+}
+
+.event__title {
+  display: block;
+  font-size: 12px;
+  text-transform: uppercase;
+  line-height: 1.4;
+  margin-bottom: 3px;
+  word-break: break-word;
+}
+
+.event__meta {
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.event__source {
+  color: var(--text-muted);
+}
+
+.event__divider {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  overflow: hidden;
+}
+
+/* ── Offline / planned panel state ───────────────────────── */
+
+.panel--offline {
+  opacity: 0.6;
+}
+
+.feed-offline {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: 8px;
+  padding: var(--panel-padding);
+}
+
+.offline-status {
+  font-size: 12px;
+  color: var(--text-secondary);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.offline-note {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-align: center;
+}

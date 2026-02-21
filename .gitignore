@@ -17,6 +17,11 @@ build/
 out/
 .next/
 .nuxt/
+public/
+
+# Vite cache
+.vite/
+client/.vite/
 
 # Logs
 *.log
@@ -43,5 +48,5 @@ Thumbs.db
 secrets/
 
 # Claude
-CLAUDE.md
-.claude/*
+# CLAUDE.md
+# .claude/*
