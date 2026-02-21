@@ -98,7 +98,7 @@ export function renderAsciiMap(events: Event[]): string {
         return `<span class="blip blip--${blip.severity.toLowerCase()}">${blip.char}</span>`
       }
       if (ch === '#') return `<span class="land">▓</span>`
-      return '·'
+      return ' '
     })
     return rendered.join('')
   })
