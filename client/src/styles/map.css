@@ -23,7 +23,7 @@
   padding: var(--panel-padding);
   font-size: 10px;
   line-height: 1.3;
-  color: var(--text-secondary);
+  color: #1E1600;
   overflow: hidden;
   white-space: pre;
   transform-origin: top left;
@@ -31,7 +31,7 @@
 
 /* Land characters */
 .ascii-map .land {
-  color: var(--text-muted);
+  color: #7A6000;
 }
 
 /* Event blips */
