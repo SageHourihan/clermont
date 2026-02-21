@@ -210,6 +210,26 @@ export function initAsciiMap(
 ): void {
   container.innerHTML = renderAsciiMap(events)
 
+  function scaleToFit(): void {
+    const parent = container.parentElement
+    if (!parent) return
+    container.style.transform = 'scale(1)' // reset to measure natural size
+    const naturalW = container.scrollWidth
+    const naturalH = container.scrollHeight
+    const availW = parent.clientWidth
+    const availH = parent.clientHeight
+    if (naturalW === 0 || naturalH === 0) return
+    const scale = Math.min(availW / naturalW, availH / naturalH, 1)
+    container.style.transform = `scale(${scale})`
+  }
+
+  requestAnimationFrame(scaleToFit)
+  const mapParent = container.parentElement
+  if (mapParent) {
+    const ro = new ResizeObserver(scaleToFit)
+    ro.observe(mapParent)
+  }
+
   const panel = container.closest('[role="button"]')
   if (panel) {
     panel.addEventListener('click', onExpand)
