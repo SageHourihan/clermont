@@ -24,7 +24,7 @@
   font-size: 9px;
   line-height: 1.2;
   color: #A07800;
-  overflow: hidden;
+  overflow: visible;
   white-space: pre;
   transform-origin: top left;
 }

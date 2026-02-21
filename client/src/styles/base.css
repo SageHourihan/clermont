@@ -88,7 +88,7 @@ a:hover {
 .main-grid {
   grid-area: main;
   display: grid;
-  grid-template-columns: 30% 70%;
+  grid-template-columns: 40% 60%;
   overflow: hidden;
 }
 
