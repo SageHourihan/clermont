@@ -1,4 +1,5 @@
 import type { FeedState } from '../../../shared/types.js'
+import { renderFilterBar } from '../filter.js'
 
 export const INITIAL_FEED_STATES: FeedState[] = [
   { feed: 'GEO', status: 'ONLINE',  lastUpdate: new Date(), eventCount: 0 },
@@ -27,21 +28,42 @@ export function initStatusBar(containerId: string, feedStates: FeedState[]): voi
           : `<span class="statusbar__sep"> | </span>${renderIndicator(s)}`
       ).join('')}
     </div>
+    ${renderFilterBar()}
     <div id="statusbar-nav-hint" class="statusbar__nav-hint statusbar__nav-hint--hidden">[HJKL] NAV</div>
     <div class="statusbar__version">CLERMONT v0.1.0-alpha</div>`
 }
 
 export function updateStatusBar(containerId: string, feedStates: FeedState[]): void {
+  // Preserve hint state across re-render
   const existing = document.getElementById('statusbar-nav-hint')
+  const hintText = existing?.textContent ?? null
   const hintVisible = existing ? !existing.classList.contains('statusbar__nav-hint--hidden') : false
+
   initStatusBar(containerId, feedStates)
-  if (hintVisible) {
-    document.getElementById('statusbar-nav-hint')?.classList.remove('statusbar__nav-hint--hidden')
+
+  if (hintVisible && hintText !== null) {
+    const newHint = document.getElementById('statusbar-nav-hint')
+    if (newHint) {
+      newHint.textContent = hintText
+      newHint.classList.remove('statusbar__nav-hint--hidden')
+    }
   }
 }
 
+// ── Hint helpers ──────────────────────────────────────────
+
 export function showNavModeHint(): void {
-  document.getElementById('statusbar-nav-hint')?.classList.remove('statusbar__nav-hint--hidden')
+  const el = document.getElementById('statusbar-nav-hint')
+  if (!el) return
+  el.textContent = '[HJKL] NAV'
+  el.classList.remove('statusbar__nav-hint--hidden')
+}
+
+export function showFilterModeHint(): void {
+  const el = document.getElementById('statusbar-nav-hint')
+  if (!el) return
+  el.textContent = 'F: [C]RIT [H]IGH [M]ED [L]OW [A]=ALL [ESC]=EXIT'
+  el.classList.remove('statusbar__nav-hint--hidden')
 }
 
 export function hideNavModeHint(): void {

@@ -1,7 +1,10 @@
 import type { Event, Feed } from '../../shared/types.js'
-import { openMap } from './map/index.js'
-import { flyToEvent } from './map/index.js'
-import { showNavModeHint, hideNavModeHint } from './panels/statusbar.js'
+import { openMap, flyToEvent } from './map/index.js'
+import { showNavModeHint, showFilterModeHint, hideNavModeHint } from './panels/statusbar.js'
+import {
+  isFilterMode, enterFilterMode, exitFilterMode,
+  toggleSeverity, resetFilter,
+} from './filter.js'
 
 const PANEL_ORDER: Feed[] = ['GEO', 'ENV', 'MKT', 'INF']
 
@@ -110,6 +113,19 @@ function activateSelectedEvent(): void {
   flyToEvent(event)
 }
 
+function doExitFilterMode(): void {
+  exitFilterMode()
+  hideNavModeHint()
+  // Remove active highlight from filter bar
+  document.getElementById('filter-bar')?.classList.remove('statusbar__filter--active')
+}
+
+function doEnterFilterMode(): void {
+  enterFilterMode()
+  showFilterModeHint()
+  document.getElementById('filter-bar')?.classList.add('statusbar__filter--active')
+}
+
 export function initKeyboard(
   overlayId: string,
   leafletContainerId: string,
@@ -127,7 +143,32 @@ export function initKeyboard(
     const mapOpen = document.getElementById(state.overlayId)
       ?.classList.contains('map-overlay--visible') ?? false
 
+    // ── Filter mode: intercepts c/h/m/l/a/Escape/f ────────
+    if (isFilterMode()) {
+      switch (e.key) {
+        case 'c': e.preventDefault(); toggleSeverity('CRITICAL'); return
+        case 'h': e.preventDefault(); toggleSeverity('HIGH'); return
+        case 'm': e.preventDefault(); toggleSeverity('MEDIUM'); return
+        case 'l': e.preventDefault(); toggleSeverity('LOW'); return
+        case 'a': e.preventDefault(); resetFilter(); return
+        case 'f':
+        case 'Escape':
+          e.preventDefault()
+          doExitFilterMode()
+          return
+      }
+      // All other keys pass through while in filter mode
+      return
+    }
+
+    // ── Normal / nav mode ──────────────────────────────────
     switch (e.key) {
+      case 'f':
+        if (mapOpen || state.active) return  // no filter mode while nav or map open
+        e.preventDefault()
+        doEnterFilterMode()
+        break
+
       case 'j':
       case 'ArrowDown':
         e.preventDefault()

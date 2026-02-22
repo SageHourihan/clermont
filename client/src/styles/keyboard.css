@@ -28,3 +28,42 @@
 .statusbar__nav-hint--hidden {
   display: none;
 }
+
+/* ── Filter bar ──────────────────────────────────────────── */
+
+.statusbar__filter {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  font-size: 11px;
+}
+
+.filter-label {
+  color: var(--text-muted);
+  margin-right: 3px;
+  letter-spacing: 0.05em;
+}
+
+.statusbar__filter--active .filter-label {
+  color: var(--amber-primary);
+}
+
+.filter-btn {
+  cursor: pointer;
+  padding: 0 1px;
+  user-select: none;
+  transition: color 0.1s;
+}
+
+.filter-btn:hover {
+  color: var(--amber-bright) !important;
+}
+
+.filter-btn--on.filter-btn--critical { color: var(--severity-critical); }
+.filter-btn--on.filter-btn--high     { color: var(--severity-high); }
+.filter-btn--on.filter-btn--medium   { color: var(--severity-medium); }
+.filter-btn--on.filter-btn--low      { color: var(--severity-low); }
+
+.filter-btn--off {
+  color: var(--text-muted);
+}

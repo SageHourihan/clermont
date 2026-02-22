@@ -10,7 +10,8 @@ import { initHeader, updateLastUpdate } from './panels/header.js'
 import { renderFeed } from './panels/feed.js'
 import { initStatusBar, updateStatusBar, INITIAL_FEED_STATES } from './panels/statusbar.js'
 import { initKeyboard, updateKeyboardEvents } from './keyboard.js'
-import type { Event } from '../../shared/types.js'
+import { applyFilter, onFilterChange, initFilterClickHandlers } from './filter.js'
+import type { Event, FeedState } from '../../shared/types.js'
 
 const POLL_INTERVAL_MS = 60_000
 
@@ -27,6 +28,7 @@ const IDS = {
 } as const
 
 let currentEvents: Event[] = []
+let currentFeedStates: FeedState[] = INITIAL_FEED_STATES
 
 // ── Data layer ────────────────────────────────────────────
 // MOCK MODE — swap for fetch calls below when the backend is ready
@@ -44,6 +46,24 @@ async function fetchEvents(): Promise<Event[]> {
   // }
 }
 
+// ── Render with current filter ────────────────────────────
+// Called on both polling refresh and filter state change.
+
+function applyCurrentFilter(): void {
+  const filtered = applyFilter(currentEvents)
+
+  const asciiMap = document.getElementById(IDS.asciiMap)
+  if (asciiMap) updateAsciiMap(asciiMap, filtered)
+
+  renderFeed(IDS.geoFeed, filtered.filter(e => e.feed === 'GEO'))
+  renderFeed(IDS.envFeed, filtered.filter(e => e.feed === 'ENV'))
+  renderFeed(IDS.mktFeed, filtered.filter(e => e.feed === 'MKT'))
+  renderFeed(IDS.infFeed, filtered.filter(e => e.feed === 'INF'))
+
+  updateStatusBar(IDS.statusbar, currentFeedStates)
+  refreshMapMarkers(filtered)
+}
+
 // ── Refresh cycle ─────────────────────────────────────────
 
 async function refresh(): Promise<void> {
@@ -53,28 +73,20 @@ async function refresh(): Promise<void> {
 
   updateLastUpdate(now)
 
-  const asciiMap = document.getElementById(IDS.asciiMap)
-  if (asciiMap) updateAsciiMap(asciiMap, events)
-
+  // Update keyboard nav snapshot from unfiltered events so j/k always
+  // navigates the full dataset regardless of what filter is active.
   const geoEvents = events.filter(e => e.feed === 'GEO')
   const envEvents = events.filter(e => e.feed === 'ENV')
   const mktEvents = events.filter(e => e.feed === 'MKT')
   const infEvents = events.filter(e => e.feed === 'INF')
-
-  renderFeed(IDS.geoFeed, geoEvents)
-  renderFeed(IDS.envFeed, envEvents)
-  renderFeed(IDS.mktFeed, mktEvents)
-  renderFeed(IDS.infFeed, infEvents)
-
   updateKeyboardEvents(geoEvents, envEvents, mktEvents, infEvents)
 
-  const feedStates = INITIAL_FEED_STATES.map(s => {
+  currentFeedStates = INITIAL_FEED_STATES.map(s => {
     const count = events.filter(e => e.feed === s.feed).length
     return count > 0 ? { ...s, status: 'ONLINE' as const, lastUpdate: now, eventCount: count } : s
   })
-  updateStatusBar(IDS.statusbar, feedStates)
 
-  refreshMapMarkers(events)
+  applyCurrentFilter()
 }
 
 // ── Init ──────────────────────────────────────────────────
@@ -93,7 +105,13 @@ function init(): void {
 
   setupMapControls(IDS.mapOverlay)
 
-  initKeyboard(IDS.mapOverlay, IDS.leafletMap, () => currentEvents)
+  initKeyboard(IDS.mapOverlay, IDS.leafletMap, () => applyFilter(currentEvents))
+
+  // Re-render feeds + map + statusbar whenever the filter changes
+  onFilterChange(applyCurrentFilter)
+
+  // Enable clicking filter buttons in the statusbar
+  initFilterClickHandlers()
 
   // First load
   refresh()
