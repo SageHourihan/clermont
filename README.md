@@ -51,6 +51,48 @@ A native terminal UI for those who live in the command line. Same data, same vib
 
 ---
 
+## CONTROLS
+
+The web interface is fully keyboard-navigable.
+
+### Navigation
+```
+j / ArrowDown   Move focus down through events
+k / ArrowUp     Move focus up through events
+h / ArrowLeft   Move focus to the previous feed panel
+l / ArrowRight  Move focus to the next feed panel
+
+1 / 2 / 3 / 4  Jump directly to GEO / ENV / MKT / INF panel
+g               Jump to first event in current panel
+G               Jump to last event in current panel
+
+Enter / o       Fly to selected event on the interactive map
+Escape          Exit navigation mode
+```
+
+### Filter
+```
+f               Enter filter mode
+  c             Toggle CRITICAL events
+  h             Toggle HIGH events
+  m             Toggle MEDIUM events
+  l             Toggle LOW events
+  a             Reset — show all severities
+  f / Escape    Exit filter mode
+```
+
+Filter state is reflected in the status bar: `FILTER:[!!][!][~][.]`
+Each glyph glows its severity color when active, dims when off.
+Clicking the glyphs directly also works.
+
+### Map
+```
+Click map panel   Open interactive Leaflet map overlay
+Escape            Close map
+```
+
+---
+
 ## DESIGN PHILOSOPHY
 
 ```
@@ -72,13 +114,17 @@ PUBLIC FIRST ...... Built for anyone, not just analysts. If a curious person
 ## STATUS
 
 ```
-[ ] Web interface ............. IN PROGRESS
-[ ] Data pipeline ............. PLANNED
-[ ] Geopolitical feed ......... PLANNED
-[ ] Natural disaster feed ..... PLANNED
-[ ] Market feed ............... PLANNED
-[ ] News aggregator ........... PLANNED
-[ ] TUI interface ............. PLANNED
+[x] Web interface shell ......... DONE — amber terminal UI, four feed panels
+[x] ASCII world map ............. DONE — Braille character map with event blips
+[x] Interactive map overlay ..... DONE — Leaflet with severity-colored markers
+[x] Keyboard navigation ......... DONE — vim-style hjkl, panel jumps, event fly-to
+[x] Severity filter ............. DONE — per-severity toggle, keyboard + click
+[ ] Live data pipeline .......... IN PROGRESS
+[ ] Geopolitical feed [GEO] ..... PLANNED
+[ ] Natural disaster feed [ENV] . PLANNED
+[ ] Market feed [MKT] ........... PLANNED
+[ ] News aggregator [INF] ....... PLANNED
+[ ] TUI interface ............... PLANNED
 ```
 
 ---
