@@ -11,7 +11,8 @@ import { renderFeed } from './panels/feed.js'
 import { initStatusBar, updateStatusBar, INITIAL_FEED_STATES } from './panels/statusbar.js'
 import { initKeyboard, updateKeyboardEvents } from './keyboard.js'
 import { applyFilter, onFilterChange, initFilterClickHandlers } from './filter.js'
-import type { Event, FeedState } from '../../shared/types.js'
+import { initDetail } from './panels/detail.js'
+import type { Event as ClerEvent, FeedState } from '../../shared/types.js'
 
 const POLL_INTERVAL_MS = 60_000
 
@@ -27,12 +28,12 @@ const IDS = {
   statusbar:   'statusbar',
 } as const
 
-let currentEvents: Event[] = []
+let currentEvents: ClerEvent[] = []
 let currentFeedStates: FeedState[] = INITIAL_FEED_STATES
 
 // ── Data layer ────────────────────────────────────────────
 // MOCK MODE — swap for fetch calls below when the backend is ready
-async function fetchEvents(): Promise<Event[]> {
+async function fetchEvents(): Promise<ClerEvent[]> {
   return getMockEvents()
 
   // LIVE MODE (uncomment when backend is ready):
@@ -106,6 +107,8 @@ function init(): void {
   setupMapControls(IDS.mapOverlay)
 
   initKeyboard(IDS.mapOverlay, IDS.leafletMap, () => applyFilter(currentEvents))
+
+  initDetail(IDS.mapOverlay, IDS.leafletMap, () => currentEvents)
 
   // Re-render feeds + map + statusbar whenever the filter changes
   onFilterChange(applyCurrentFilter)

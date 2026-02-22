@@ -36,6 +36,7 @@
 
 .event-row {
   margin-bottom: 8px;
+  cursor: pointer;
 }
 
 .event__header {
@@ -77,6 +78,135 @@
   color: var(--text-muted);
   margin-top: 6px;
   overflow: hidden;
+}
+
+/* ── Event detail drawer ─────────────────────────────────── */
+
+.event-detail {
+  position: absolute;
+  top: 40px;    /* below header */
+  right: 0;
+  bottom: 28px; /* above statusbar */
+  width: 360px;
+  background: var(--bg-surface);
+  border-left: var(--border);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.event-detail--hidden {
+  display: none;
+}
+
+.detail__label {
+  padding: 4px var(--panel-padding);
+  border-bottom: var(--border);
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--bg-elevated);
+  flex-shrink: 0;
+}
+
+.detail__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--panel-padding);
+  scrollbar-width: thin;
+  scrollbar-color: var(--amber-dim) var(--bg-surface);
+}
+
+.detail__body::-webkit-scrollbar { width: 4px; }
+.detail__body::-webkit-scrollbar-track { background: var(--bg-surface); }
+.detail__body::-webkit-scrollbar-thumb { background: var(--amber-dim); }
+
+.detail__header-bar {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.detail__feed {
+  color: var(--text-secondary);
+}
+
+.detail__ts {
+  color: var(--text-muted);
+}
+
+.detail__divider {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin: 8px 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.detail__title {
+  font-size: 13px;
+  text-transform: uppercase;
+  line-height: 1.5;
+  font-weight: normal;
+  margin: 8px 0;
+  word-break: break-word;
+}
+
+.detail__fields {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4px 0;
+}
+
+.detail__field-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  padding: 3px 14px 3px 0;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.detail__field-value {
+  font-size: 11px;
+  color: var(--text-primary);
+  padding: 3px 0;
+  word-break: break-all;
+}
+
+.detail__url {
+  font-size: 10px;
+  word-break: break-all;
+}
+
+.detail__url--none {
+  color: var(--text-muted);
+}
+
+.detail__actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.detail__action-btn {
+  background: none;
+  border: 1px solid var(--amber-dim);
+  color: var(--amber-primary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 4px 10px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.detail__action-btn:hover {
+  background: var(--amber-glow);
+  color: var(--amber-bright);
 }
 
 /* ── Offline / planned panel state ───────────────────────── */

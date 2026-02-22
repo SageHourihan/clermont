@@ -1,10 +1,10 @@
-import type { Event, Feed } from '../../shared/types.js'
-import { openMap, flyToEvent } from './map/index.js'
+import type { Event as ClerEvent, Feed } from '../../shared/types.js'
 import { showNavModeHint, showFilterModeHint, hideNavModeHint } from './panels/statusbar.js'
 import {
   isFilterMode, enterFilterMode, exitFilterMode,
   toggleSeverity, resetFilter,
 } from './filter.js'
+import { isDetailOpen, closeDetail, flyCurrentToMap, openDetail } from './panels/detail.js'
 
 const PANEL_ORDER: Feed[] = ['GEO', 'ENV', 'MKT', 'INF']
 
@@ -19,10 +19,10 @@ interface KbState {
   active: boolean
   panelIndex: number       // 0–3
   rowIndex: number         // 0-based within current panel; -1 = no row selected
-  events: Record<Feed, Event[]>
+  events: Record<Feed, ClerEvent[]>
   overlayId: string
   leafletContainerId: string
-  getAllEvents: () => Event[]
+  getAllEvents: () => ClerEvent[]
 }
 
 const state: KbState = {
@@ -35,7 +35,7 @@ const state: KbState = {
   getAllEvents: () => [],
 }
 
-function sortedDesc(events: Event[]): Event[] {
+function sortedDesc(events: ClerEvent[]): ClerEvent[] {
   return [...events].sort((a, b) =>
     new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
   )
@@ -109,8 +109,7 @@ function activateSelectedEvent(): void {
   const feed = PANEL_ORDER[state.panelIndex]
   const event = state.events[feed][state.rowIndex]
   if (!event) return
-  openMap(state.leafletContainerId, state.overlayId, state.getAllEvents())
-  flyToEvent(event)
+  openDetail(event)
 }
 
 function doExitFilterMode(): void {
@@ -129,7 +128,7 @@ function doEnterFilterMode(): void {
 export function initKeyboard(
   overlayId: string,
   leafletContainerId: string,
-  getAllEvents: () => Event[]
+  getAllEvents: () => ClerEvent[]
 ): void {
   state.overlayId = overlayId
   state.leafletContainerId = leafletContainerId
@@ -142,6 +141,24 @@ export function initKeyboard(
 
     const mapOpen = document.getElementById(state.overlayId)
       ?.classList.contains('map-overlay--visible') ?? false
+
+    // ── Detail drawer open: intercept m and Escape ─────────
+    if (isDetailOpen()) {
+      switch (e.key) {
+        case 'm':
+        case 'M':
+          e.preventDefault()
+          flyCurrentToMap()
+          return
+        case 'Escape':
+          e.preventDefault()
+          closeDetail()
+          if (state.active) showNavModeHint()
+          else hideNavModeHint()
+          return
+      }
+      return // swallow all other keys while drawer is open
+    }
 
     // ── Filter mode: intercepts c/h/m/l/a/Escape/f ────────
     if (isFilterMode()) {
@@ -214,7 +231,7 @@ export function initKeyboard(
         if (!state.active || mapOpen) return
         e.preventDefault()
         activateSelectedEvent()
-        break
+        return
       case 'Escape':
         if (mapOpen) return  // map/index.ts handles this
         if (state.active) {
@@ -230,10 +247,10 @@ export function initKeyboard(
 // Called from main.ts refresh() after all four renderFeed() calls.
 // Keeps the sorted event snapshot in sync and re-applies focus after re-renders.
 export function updateKeyboardEvents(
-  geo: Event[],
-  env: Event[],
-  mkt: Event[],
-  inf: Event[]
+  geo: ClerEvent[],
+  env: ClerEvent[],
+  mkt: ClerEvent[],
+  inf: ClerEvent[]
 ): void {
   state.events.GEO = sortedDesc(geo)
   state.events.ENV = sortedDesc(env)
