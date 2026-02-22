@@ -1,0 +1,30 @@
+/* ============================================================
+   KEYBOARD.CSS — Vim-style nav mode focus styles
+   ============================================================ */
+
+.event-row--focused {
+  background: var(--amber-glow);
+  border-left: 3px solid var(--amber-primary);
+}
+
+.event-row--focused .event__title::before {
+  content: '> ';
+  color: var(--amber-primary);
+}
+
+.panel__label--panel-focused {
+  color: var(--amber-bright);
+  border-bottom: 1px solid var(--amber-primary);
+  background: rgba(255, 176, 0, 0.08);
+}
+
+.statusbar__nav-hint {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+}
+
+.statusbar__nav-hint--hidden {
+  display: none;
+}

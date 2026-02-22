@@ -27,9 +27,23 @@ export function initStatusBar(containerId: string, feedStates: FeedState[]): voi
           : `<span class="statusbar__sep"> | </span>${renderIndicator(s)}`
       ).join('')}
     </div>
+    <div id="statusbar-nav-hint" class="statusbar__nav-hint statusbar__nav-hint--hidden">[HJKL] NAV</div>
     <div class="statusbar__version">CLERMONT v0.1.0-alpha</div>`
 }
 
 export function updateStatusBar(containerId: string, feedStates: FeedState[]): void {
+  const existing = document.getElementById('statusbar-nav-hint')
+  const hintVisible = existing ? !existing.classList.contains('statusbar__nav-hint--hidden') : false
   initStatusBar(containerId, feedStates)
+  if (hintVisible) {
+    document.getElementById('statusbar-nav-hint')?.classList.remove('statusbar__nav-hint--hidden')
+  }
+}
+
+export function showNavModeHint(): void {
+  document.getElementById('statusbar-nav-hint')?.classList.remove('statusbar__nav-hint--hidden')
+}
+
+export function hideNavModeHint(): void {
+  document.getElementById('statusbar-nav-hint')?.classList.add('statusbar__nav-hint--hidden')
 }

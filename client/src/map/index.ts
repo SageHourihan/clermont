@@ -75,6 +75,13 @@ export function closeMap(overlayId: string): void {
   state.isVisible = false
 }
 
+export function flyToEvent(event: Event): void {
+  if (!state.map) return
+  requestAnimationFrame(() => {
+    state.map?.flyTo([event.lat, event.lng], 5, { animate: true, duration: 1.2 })
+  })
+}
+
 // Called by the polling loop when new data arrives
 export function refreshMapMarkers(events: Event[]): void {
   if (!state.map || !state.isVisible) return

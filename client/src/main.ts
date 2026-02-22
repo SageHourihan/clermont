@@ -1,6 +1,7 @@
 import './styles/base.css'
 import './styles/map.css'
 import './styles/panels.css'
+import './styles/keyboard.css'
 
 import { getMockEvents } from './data/mock.js'
 import { initAsciiMap, updateAsciiMap } from './map/ascii.js'
@@ -8,6 +9,7 @@ import { openMap, setupMapControls, refreshMapMarkers } from './map/index.js'
 import { initHeader, updateLastUpdate } from './panels/header.js'
 import { renderFeed } from './panels/feed.js'
 import { initStatusBar, updateStatusBar, INITIAL_FEED_STATES } from './panels/statusbar.js'
+import { initKeyboard, updateKeyboardEvents } from './keyboard.js'
 import type { Event } from '../../shared/types.js'
 
 const POLL_INTERVAL_MS = 60_000
@@ -64,6 +66,8 @@ async function refresh(): Promise<void> {
   renderFeed(IDS.mktFeed, mktEvents)
   renderFeed(IDS.infFeed, infEvents)
 
+  updateKeyboardEvents(geoEvents, envEvents, mktEvents, infEvents)
+
   const feedStates = INITIAL_FEED_STATES.map(s => {
     const count = events.filter(e => e.feed === s.feed).length
     return count > 0 ? { ...s, status: 'ONLINE' as const, lastUpdate: now, eventCount: count } : s
@@ -88,6 +92,8 @@ function init(): void {
   }
 
   setupMapControls(IDS.mapOverlay)
+
+  initKeyboard(IDS.mapOverlay, IDS.leafletMap, () => currentEvents)
 
   // First load
   refresh()
