@@ -1,0 +1,296 @@
+/* ============================================================
+   MODES.CSS — Mode bar + per-mode panel styles
+   ============================================================ */
+
+/* ── Mode bar ────────────────────────────────────────────── */
+
+.mode-bar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 var(--panel-padding);
+  border-bottom: var(--border);
+  background: var(--bg-elevated);
+  overflow: hidden;
+}
+
+.mode-btn {
+  background: none;
+  border: none;
+  border-right: 1px solid var(--text-muted);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 0 10px;
+  height: 28px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color 0.1s, background 0.1s;
+  white-space: nowrap;
+}
+
+.mode-btn:hover {
+  color: var(--amber-primary);
+  background: var(--amber-glow);
+}
+
+.mode-btn--active {
+  color: var(--amber-bright);
+  background: var(--amber-glow);
+}
+
+.mode-btn:first-child {
+  border-left: 1px solid var(--text-muted);
+}
+
+/* ── Mode content container ──────────────────────────────── */
+
+#mode-content {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--panel-padding);
+  background: var(--bg-base);
+}
+
+/* ── Header mode indicator ───────────────────────────────── */
+
+.header__mode {
+  font-size: 11px;
+  color: var(--amber-dim);
+  letter-spacing: 0.05em;
+  margin-left: 8px;
+}
+
+/* ── Timeline mode ───────────────────────────────────────── */
+
+.timeline__group-header {
+  font-size: 11px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--text-muted);
+  padding: 4px 0 2px;
+  margin: 12px 0 4px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.timeline__group-header:first-child {
+  margin-top: 0;
+}
+
+.timeline .event-row {
+  cursor: pointer;
+}
+
+/* ── Metrics mode ────────────────────────────────────────── */
+
+.metrics__section-title {
+  font-size: 12px;
+  color: var(--amber-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: var(--border);
+  padding-bottom: 4px;
+  margin-bottom: 8px;
+}
+
+.metrics__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+
+.metrics__label {
+  width: 80px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+.metrics__bar-track {
+  flex: 1;
+  background: var(--bg-elevated);
+  height: 10px;
+  position: relative;
+  border: 1px solid var(--text-muted);
+}
+
+.metrics__bar-fill {
+  height: 100%;
+  background: var(--amber-dim);
+  transition: width 0.3s ease;
+}
+
+.metrics__bar-fill--critical { background: var(--severity-critical); }
+.metrics__bar-fill--high     { background: var(--severity-high); }
+.metrics__bar-fill--medium   { background: var(--severity-medium); }
+.metrics__bar-fill--low      { background: var(--severity-low); }
+.metrics__bar-fill--geo      { background: #4488ff; }
+.metrics__bar-fill--env      { background: #44cc66; }
+.metrics__bar-fill--mkt      { background: #ffcc44; }
+.metrics__bar-fill--inf      { background: #cc44ff; }
+
+.metrics__count {
+  width: 36px;
+  text-align: right;
+  color: var(--text-primary);
+  font-size: 11px;
+}
+
+.metrics__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.metrics__priority-list {
+  margin-top: 4px;
+}
+
+.metrics__priority-list .event-row {
+  cursor: pointer;
+}
+
+/* ── Minimal mode ────────────────────────────────────────── */
+
+#minimal-counter {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(13, 13, 13, 0.85);
+  border: var(--border);
+  padding: 8px 12px;
+  font-size: 13px;
+  line-height: 1.8;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.minimal-counter__label {
+  font-size: 10px;
+  color: var(--text-secondary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--text-muted);
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+
+/* ── Watchlist mode ──────────────────────────────────────── */
+
+.watchlist__empty {
+  color: var(--text-secondary);
+  font-size: 12px;
+  margin: 24px 0;
+  white-space: pre;
+}
+
+.watchlist .event-row {
+  cursor: pointer;
+  position: relative;
+}
+
+.watchlist__pin-badge {
+  font-size: 10px;
+  color: var(--amber-dim);
+  float: right;
+  margin-top: 2px;
+}
+
+/* ── Focused mode ────────────────────────────────────────── */
+
+.focused__title {
+  font-size: 16px;
+  font-weight: normal;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.focused__meta-grid {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 2px 16px;
+  font-size: 12px;
+  margin-bottom: 16px;
+}
+
+.focused__meta-label {
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.focused__meta-value {
+  color: var(--text-primary);
+}
+
+.focused__divider {
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.focused__section-title {
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--text-muted);
+  padding-bottom: 3px;
+  margin-bottom: 6px;
+}
+
+.focused__related {
+  margin-bottom: 16px;
+}
+
+.focused__related .event-row {
+  cursor: pointer;
+}
+
+.focused__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.focused__action-btn {
+  background: none;
+  border: var(--border);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 4px 10px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.focused__action-btn:hover {
+  color: var(--amber-primary);
+  border-color: var(--amber-primary);
+}
+
+.focused__action-btn--active {
+  color: var(--amber-bright);
+  border-color: var(--amber-bright);
+}
+
+/* ── Row flash animation ─────────────────────────────────── */
+
+@keyframes row-flash {
+  0%   { background: var(--amber-glow); }
+  100% { background: transparent; }
+}
+
+.event-row--flash {
+  animation: row-flash 0.5s ease-out forwards;
+}

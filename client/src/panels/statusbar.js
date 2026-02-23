@@ -58,3 +58,18 @@ export function showFilterModeHint() {
 export function hideNavModeHint() {
     document.getElementById('statusbar-nav-hint')?.classList.add('statusbar__nav-hint--hidden');
 }
+const MODE_HINTS = {
+    DEFAULT: '[HJKL] NAV',
+    TIMELINE: 'TIMELINE — [ESC] DEFAULT',
+    METRICS: 'METRICS — [ESC] DEFAULT',
+    MINIMAL: 'MINIMAL — [ESC] DEFAULT',
+    WATCHLIST: 'WATCHLIST — [W] PIN/UNPIN — [ESC] DEFAULT',
+    FOCUSED: 'FOCUSED — [M] MAP [W] WATCH [ESC] BACK',
+};
+export function showModeHint(mode) {
+    const el = document.getElementById('statusbar-nav-hint');
+    if (!el)
+        return;
+    el.textContent = MODE_HINTS[mode];
+    el.classList.remove('statusbar__nav-hint--hidden');
+}

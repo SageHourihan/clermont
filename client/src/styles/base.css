@@ -62,15 +62,20 @@ a:hover {
 
 #app {
   display: grid;
-  grid-template-rows: 40px 1fr 28px;
+  grid-template-rows: 40px 28px 1fr 28px;
   grid-template-areas:
     "header"
+    "modebar"
     "main"
     "statusbar";
   height: 100vh;
   width: 100vw;
   position: relative;
   overflow: hidden;
+}
+
+.mode-bar {
+  grid-area: modebar;
 }
 
 .header {
@@ -215,4 +220,18 @@ a:hover {
   display: grid;
   grid-template-rows: 1fr 1fr 1fr 1fr;
   overflow: hidden;
+}
+
+/* ── Mode layout overrides ───────────────────────────────── */
+
+.main-grid[data-mode="TIMELINE"],
+.main-grid[data-mode="METRICS"],
+.main-grid[data-mode="MINIMAL"],
+.main-grid[data-mode="WATCHLIST"],
+.main-grid[data-mode="FOCUSED"] {
+  grid-template-columns: 1fr;
+}
+
+.main-grid[data-mode="MINIMAL"] .feed-grid {
+  display: none;
 }

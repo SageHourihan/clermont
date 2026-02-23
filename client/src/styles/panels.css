@@ -209,6 +209,11 @@
   color: var(--amber-bright);
 }
 
+.detail__action-btn--active {
+  color: var(--amber-bright);
+  border-color: var(--amber-bright);
+}
+
 /* ── Offline / planned panel state ───────────────────────── */
 
 .panel--offline {

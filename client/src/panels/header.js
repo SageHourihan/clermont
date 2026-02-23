@@ -17,6 +17,7 @@ export function initHeader(containerId) {
       <span class="header__status">SYS: NOMINAL</span>
       <span class="header__divider"> // </span>
       <span class="header__timestamp">LAST UPDATE: <span id="last-update-ts">${ts}</span></span>
+      <span id="header-mode-indicator" class="header__mode"> // MODE: DEFAULT</span>
     </div>`;
     blinkHandle = window.setInterval(() => {
         blinkOn = !blinkOn;
@@ -29,6 +30,11 @@ export function updateLastUpdate(date) {
     const el = document.getElementById('last-update-ts');
     if (el)
         el.textContent = formatTimestamp(date);
+}
+export function updateModeIndicator(mode) {
+    const el = document.getElementById('header-mode-indicator');
+    if (el)
+        el.textContent = ` // MODE: ${mode}`;
 }
 export function destroyHeader() {
     window.clearInterval(blinkHandle);

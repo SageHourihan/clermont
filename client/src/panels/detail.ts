@@ -1,5 +1,8 @@
 import type { Event, Severity } from '../../../shared/types.js'
 import { openMap, flyToEvent } from '../map/index.js'
+import { togglePin, isPinned } from '../watchlist.js'
+import { setFocusedEvent } from './focused.js'
+import { setMode } from '../modes.js'
 
 // ── State ─────────────────────────────────────────────────
 
@@ -66,6 +69,8 @@ function renderBody(event: Event): string {
     <div class="detail__divider">----------------------------------------</div>
     <div class="detail__actions">
       <button class="detail__action-btn" id="detail-map-btn">[M] OPEN MAP</button>
+      <button class="detail__action-btn" id="detail-watch-btn">[W] WATCH</button>
+      <button class="detail__action-btn" id="detail-focus-btn">[F] FOCUS</button>
       <button class="detail__action-btn" id="detail-close-btn">[ESC] CLOSE</button>
     </div>
   `
@@ -92,6 +97,26 @@ export function openDetail(event: Event): void {
     <div class="detail__body">${renderBody(event)}</div>
   `
   el.classList.remove('event-detail--hidden')
+
+  // Sync watch button state
+  const watchBtn = document.getElementById('detail-watch-btn')
+  if (watchBtn) {
+    const pinned = isPinned(event.id)
+    watchBtn.textContent = pinned ? '[W] UNWATCH' : '[W] WATCH'
+    watchBtn.classList.toggle('detail__action-btn--active', pinned)
+    watchBtn.addEventListener('click', () => {
+      const nowPinned = togglePin(event.id)
+      watchBtn.textContent = nowPinned ? '[W] UNWATCH' : '[W] WATCH'
+      watchBtn.classList.toggle('detail__action-btn--active', nowPinned)
+    })
+  }
+
+  document.getElementById('detail-focus-btn')
+    ?.addEventListener('click', () => {
+      setFocusedEvent(event)
+      closeDetail()
+      setMode('FOCUSED')
+    })
 
   document.getElementById('detail-map-btn')
     ?.addEventListener('click', flyCurrentToMap)

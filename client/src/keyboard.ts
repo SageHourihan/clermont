@@ -4,7 +4,10 @@ import {
   isFilterMode, enterFilterMode, exitFilterMode,
   toggleSeverity, resetFilter,
 } from './filter.js'
-import { isDetailOpen, closeDetail, flyCurrentToMap, openDetail } from './panels/detail.js'
+import { isDetailOpen, closeDetail, flyCurrentToMap, openDetail, getCurrentDetailEvent } from './panels/detail.js'
+import { setMode, getMode, getPreviousMode } from './modes.js'
+import { togglePin } from './watchlist.js'
+import { setFocusedEvent } from './panels/focused.js'
 
 const PANEL_ORDER: Feed[] = ['GEO', 'ENV', 'MKT', 'INF']
 
@@ -142,7 +145,7 @@ export function initKeyboard(
     const mapOpen = document.getElementById(state.overlayId)
       ?.classList.contains('map-overlay--visible') ?? false
 
-    // ── Detail drawer open: intercept m and Escape ─────────
+    // ── Detail drawer open: intercept m/f/Enter/Escape ────
     if (isDetailOpen()) {
       switch (e.key) {
         case 'm':
@@ -150,6 +153,19 @@ export function initKeyboard(
           e.preventDefault()
           flyCurrentToMap()
           return
+        case 'f':
+        case 'F':
+        case 'Enter': {
+          e.preventDefault()
+          // Use the event shown in the detail drawer (works for both mouse and keyboard open)
+          const ev = getCurrentDetailEvent()
+          if (ev) {
+            setFocusedEvent(ev)
+            closeDetail()
+            setMode('FOCUSED')
+          }
+          return
+        }
         case 'Escape':
           e.preventDefault()
           closeDetail()
@@ -180,6 +196,36 @@ export function initKeyboard(
 
     // ── Normal / nav mode ──────────────────────────────────
     switch (e.key) {
+      case 't':
+      case 'T':
+        e.preventDefault()
+        setMode('TIMELINE')
+        break
+      case 'x':
+      case 'X':
+        e.preventDefault()
+        setMode('METRICS')
+        break
+      case 'q':
+      case 'Q':
+        e.preventDefault()
+        setMode('MINIMAL')
+        break
+      case 'w':
+      case 'W':
+        e.preventDefault()
+        if (state.active && state.rowIndex >= 0) {
+          // Pin/unpin the focused event
+          const feed = PANEL_ORDER[state.panelIndex]
+          const ev = state.events[feed][state.rowIndex]
+          if (ev) {
+            togglePin(ev.id)
+            flashFocusedRow()
+          }
+        } else {
+          setMode('WATCHLIST')
+        }
+        break
       case 'f':
         if (mapOpen || state.active) return  // no filter mode while nav or map open
         e.preventDefault()
@@ -234,14 +280,45 @@ export function initKeyboard(
         return
       case 'Escape':
         if (mapOpen) return  // map/index.ts handles this
-        if (state.active) {
-          clearAllFocusStyles()
-          state.active = false
-          hideNavModeHint()
+        {
+          const mode = getMode()
+          if (mode === 'FOCUSED') {
+            e.preventDefault()
+            setMode(getPreviousMode())
+          } else if (mode !== 'DEFAULT') {
+            e.preventDefault()
+            setMode('DEFAULT')
+          } else if (state.active) {
+            clearAllFocusStyles()
+            state.active = false
+            hideNavModeHint()
+          }
         }
         break
     }
   })
+}
+
+// Called on mode switches to reset nav state cleanly.
+export function resetNavState(): void {
+  clearAllFocusStyles()
+  state.active = false
+  hideNavModeHint()
+}
+
+// Brief amber flash on the currently focused row to confirm pin action.
+function flashFocusedRow(): void {
+  const feed = PANEL_ORDER[state.panelIndex]
+  const container = document.getElementById(FEED_CONTAINER_IDS[feed])
+  if (!container) return
+  const rows = container.querySelectorAll<HTMLElement>('.event-row')
+  const row = rows[state.rowIndex]
+  if (!row) return
+  row.classList.remove('event-row--flash')
+  // Trigger reflow to restart animation
+  void row.offsetWidth
+  row.classList.add('event-row--flash')
+  row.addEventListener('animationend', () => row.classList.remove('event-row--flash'), { once: true })
 }
 
 // Called from main.ts refresh() after all four renderFeed() calls.

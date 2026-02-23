@@ -2,22 +2,32 @@ import './styles/base.css'
 import './styles/map.css'
 import './styles/panels.css'
 import './styles/keyboard.css'
+import './styles/modes.css'
 
 import { getMockEvents } from './data/mock.js'
-import { initAsciiMap, updateAsciiMap } from './map/ascii.js'
+import { initAsciiMap, updateAsciiMap, destroyAsciiMap } from './map/ascii.js'
 import { openMap, setupMapControls, refreshMapMarkers } from './map/index.js'
-import { initHeader, updateLastUpdate } from './panels/header.js'
+import { initHeader, updateLastUpdate, updateModeIndicator } from './panels/header.js'
 import { renderFeed } from './panels/feed.js'
-import { initStatusBar, updateStatusBar, INITIAL_FEED_STATES } from './panels/statusbar.js'
-import { initKeyboard, updateKeyboardEvents } from './keyboard.js'
+import { initStatusBar, updateStatusBar, INITIAL_FEED_STATES, showModeHint, hideNavModeHint } from './panels/statusbar.js'
+import { initKeyboard, updateKeyboardEvents, resetNavState } from './keyboard.js'
 import { applyFilter, onFilterChange, initFilterClickHandlers } from './filter.js'
 import { initDetail } from './panels/detail.js'
+import { initModeBar, renderModeBar } from './panels/modebar.js'
+import { renderTimeline } from './panels/timeline.js'
+import { renderMetrics } from './panels/metrics.js'
+import { renderMinimalOverlay, removeMinimalOverlay } from './panels/minimal.js'
+import { renderWatchlist } from './panels/watchlist-panel.js'
+import { initFocused, renderFocused } from './panels/focused.js'
+import { getMode, setMode, onModeChange } from './modes.js'
+import { reconcileWatchlist, onWatchlistChange } from './watchlist.js'
 import type { Event as ClerEvent, FeedState } from '../../shared/types.js'
 
 const POLL_INTERVAL_MS = 60_000
 
 const IDS = {
   asciiMap:    'ascii-map',
+  asciiPanel:  'ascii-map-panel',
   mapOverlay:  'map-overlay',
   leafletMap:  'leaflet-map',
   geoFeed:     'geo-feed',
@@ -26,13 +36,66 @@ const IDS = {
   infFeed:     'inf-feed',
   header:      'header',
   statusbar:   'statusbar',
+  modeBar:     'mode-bar',
+  mainGrid:    'main-grid',
+  modeContent: 'mode-content',
 } as const
 
 let currentEvents: ClerEvent[] = []
 let currentFeedStates: FeedState[] = INITIAL_FEED_STATES
 
+// ── DOM fragment cache for DEFAULT mode ───────────────────
+// We save the ascii map panel + feed grid into a fragment when leaving DEFAULT
+// so they can be restored cheaply without re-parsing HTML.
+
+let _defaultFragment: DocumentFragment | null = null
+
+function ensureDefaultContent(): void {
+  const mainGrid = document.getElementById(IDS.mainGrid)
+  if (!mainGrid) return
+
+  const modeContent = document.getElementById(IDS.modeContent)
+  if (!modeContent) return  // already in DEFAULT layout
+
+  mainGrid.removeChild(modeContent)
+
+  if (_defaultFragment) {
+    mainGrid.appendChild(_defaultFragment)
+    _defaultFragment = null
+  }
+
+  // Re-init ascii map (ResizeObserver was disconnected)
+  const asciiMap = document.getElementById(IDS.asciiMap)
+  if (asciiMap) {
+    initAsciiMap(asciiMap, applyFilter(currentEvents), () => {
+      openMap(IDS.leafletMap, IDS.mapOverlay, currentEvents)
+    })
+  }
+}
+
+function ensureModeContent(): HTMLElement {
+  const mainGrid = document.getElementById(IDS.mainGrid)!
+
+  let modeContent = document.getElementById(IDS.modeContent)
+  if (modeContent) return modeContent
+
+  // Disconnect ResizeObserver before detaching nodes
+  destroyAsciiMap()
+
+  // Save DEFAULT nodes into a fragment
+  _defaultFragment = document.createDocumentFragment()
+  while (mainGrid.firstChild) {
+    _defaultFragment.appendChild(mainGrid.firstChild)
+  }
+
+  modeContent = document.createElement('div')
+  modeContent.id = IDS.modeContent
+  mainGrid.appendChild(modeContent)
+  return modeContent
+}
+
 // ── Data layer ────────────────────────────────────────────
-// MOCK MODE — swap for fetch calls below when the backend is ready
+
 async function fetchEvents(): Promise<ClerEvent[]> {
   return getMockEvents()
 
@@ -47,19 +110,57 @@ async function fetchEvents(): Promise<ClerEvent[]> {
   // }
 }
 
-// ── Render with current filter ────────────────────────────
-// Called on both polling refresh and filter state change.
+// ── Render for the active mode ────────────────────────────
 
-function applyCurrentFilter(): void {
+function renderForMode(): void {
+  const mode = getMode()
   const filtered = applyFilter(currentEvents)
 
-  const asciiMap = document.getElementById(IDS.asciiMap)
-  if (asciiMap) updateAsciiMap(asciiMap, filtered)
+  // Update data-mode attribute on main grid for CSS mode switching
+  const mainGrid = document.getElementById(IDS.mainGrid)
+  if (mainGrid) mainGrid.setAttribute('data-mode', mode)
 
-  renderFeed(IDS.geoFeed, filtered.filter(e => e.feed === 'GEO'))
-  renderFeed(IDS.envFeed, filtered.filter(e => e.feed === 'ENV'))
-  renderFeed(IDS.mktFeed, filtered.filter(e => e.feed === 'MKT'))
-  renderFeed(IDS.infFeed, filtered.filter(e => e.feed === 'INF'))
+  if (mode === 'DEFAULT' || mode === 'MINIMAL') {
+    // These modes use the original DOM layout (ascii map + feed grid)
+    ensureDefaultContent()
+    // Re-set data-mode since ensureDefaultContent restores nodes
+    if (mainGrid) mainGrid.setAttribute('data-mode', mode)
+
+    const asciiMap = document.getElementById(IDS.asciiMap)
+    if (asciiMap) updateAsciiMap(asciiMap, filtered)
+
+    if (mode === 'DEFAULT') {
+      removeMinimalOverlay()
+      renderFeed(IDS.geoFeed, filtered.filter(e => e.feed === 'GEO'))
+      renderFeed(IDS.envFeed, filtered.filter(e => e.feed === 'ENV'))
+      renderFeed(IDS.mktFeed, filtered.filter(e => e.feed === 'MKT'))
+      renderFeed(IDS.infFeed, filtered.filter(e => e.feed === 'INF'))
+    } else {
+      renderMinimalOverlay(filtered)
+    }
+
+    updateStatusBar(IDS.statusbar, currentFeedStates)
+    refreshMapMarkers(filtered)
+    return
+  }
+
+  // All other modes use a single #mode-content div
+  ensureModeContent()
+
+  switch (mode) {
+    case 'TIMELINE':
+      renderTimeline(IDS.modeContent, filtered)
+      break
+    case 'METRICS':
+      renderMetrics(IDS.modeContent, filtered)
+      break
+    case 'WATCHLIST':
+      renderWatchlist(IDS.modeContent, currentEvents)
+      break
+    case 'FOCUSED':
+      renderFocused(IDS.modeContent)
+      break
+  }
 
   updateStatusBar(IDS.statusbar, currentFeedStates)
   refreshMapMarkers(filtered)
@@ -70,12 +171,11 @@ function applyCurrentFilter(): void {
 async function refresh(): Promise<void> {
   const events = await fetchEvents()
   currentEvents = events
+  reconcileWatchlist(events)
   const now = new Date()
 
   updateLastUpdate(now)
 
-  // Update keyboard nav snapshot from unfiltered events so j/k always
-  // navigates the full dataset regardless of what filter is active.
   const geoEvents = events.filter(e => e.feed === 'GEO')
   const envEvents = events.filter(e => e.feed === 'ENV')
   const mktEvents = events.filter(e => e.feed === 'MKT')
@@ -87,14 +187,13 @@ async function refresh(): Promise<void> {
     return count > 0 ? { ...s, status: 'ONLINE' as const, lastUpdate: now, eventCount: count } : s
   })
 
-  applyCurrentFilter()
+  renderForMode()
 }
 
 // ── Init ──────────────────────────────────────────────────
 
 function init(): void {
   initHeader(IDS.header)
-
   initStatusBar(IDS.statusbar, INITIAL_FEED_STATES)
 
   const asciiMap = document.getElementById(IDS.asciiMap)
@@ -110,11 +209,39 @@ function init(): void {
 
   initDetail(IDS.mapOverlay, IDS.leafletMap, () => currentEvents)
 
-  // Re-render feeds + map + statusbar whenever the filter changes
-  onFilterChange(applyCurrentFilter)
+  initFocused(IDS.mapOverlay, IDS.leafletMap, () => currentEvents)
+
+  initModeBar(IDS.modeBar, setMode)
+
+  // Re-render whenever the filter changes
+  onFilterChange(renderForMode)
 
   // Enable clicking filter buttons in the statusbar
   initFilterClickHandlers()
+
+  // Re-render on mode change
+  onModeChange((mode, _prev) => {
+    // Clean up MINIMAL overlay when leaving MINIMAL to a non-MINIMAL mode
+    if (_prev === 'MINIMAL' && mode !== 'MINIMAL') removeMinimalOverlay()
+
+    resetNavState()
+    renderForMode()
+    renderModeBar(IDS.modeBar, mode)
+    updateModeIndicator(mode)
+    if (mode !== 'DEFAULT') {
+      showModeHint(mode)
+    } else {
+      hideNavModeHint()
+    }
+  })
+
+  // Re-render watchlist/focused when pins change
+  onWatchlistChange(() => {
+    const mode = getMode()
+    if (mode === 'WATCHLIST' || mode === 'FOCUSED') {
+      renderForMode()
+    }
+  })
 
   // First load
   refresh()

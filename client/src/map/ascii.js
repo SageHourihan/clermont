@@ -41,6 +41,7 @@ const SEVERITY_RANK = {
 // ── Cached land render ───────────────────────────────────────────────────────
 // Land pixels are static — we render them once and cache the char grid.
 let _landGrid = null;
+let _resizeObserver = null;
 function buildLandGrid() {
     if (_landGrid)
         return _landGrid;
@@ -203,8 +204,9 @@ export function initAsciiMap(container, events, onExpand) {
     requestAnimationFrame(scaleToFit);
     const mapParent = container.parentElement;
     if (mapParent) {
-        const ro = new ResizeObserver(scaleToFit);
-        ro.observe(mapParent);
+        _resizeObserver?.disconnect();
+        _resizeObserver = new ResizeObserver(scaleToFit);
+        _resizeObserver.observe(mapParent);
     }
     const panel = container.closest('[role="button"]');
     if (panel) {
@@ -220,4 +222,8 @@ export function initAsciiMap(container, events, onExpand) {
 }
 export function updateAsciiMap(container, events) {
     container.innerHTML = renderAsciiMap(events);
+}
+export function destroyAsciiMap() {
+    _resizeObserver?.disconnect();
+    _resizeObserver = null;
 }

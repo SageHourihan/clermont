@@ -49,6 +49,7 @@ const SEVERITY_RANK: Record<Severity, number> = {
 // ── Cached land render ───────────────────────────────────────────────────────
 // Land pixels are static — we render them once and cache the char grid.
 let _landGrid: string[][] | null = null
+let _resizeObserver: ResizeObserver | null = null
 
 function buildLandGrid(): string[][] {
   if (_landGrid) return _landGrid
@@ -232,8 +233,9 @@ export function initAsciiMap(
   requestAnimationFrame(scaleToFit)
   const mapParent = container.parentElement
   if (mapParent) {
-    const ro = new ResizeObserver(scaleToFit)
-    ro.observe(mapParent)
+    _resizeObserver?.disconnect()
+    _resizeObserver = new ResizeObserver(scaleToFit)
+    _resizeObserver.observe(mapParent)
   }
 
   const panel = container.closest('[role="button"]')
@@ -251,4 +253,9 @@ export function initAsciiMap(
 
 export function updateAsciiMap(container: HTMLElement, events: Event[]): void {
   container.innerHTML = renderAsciiMap(events)
+}
+
+export function destroyAsciiMap(): void {
+  _resizeObserver?.disconnect()
+  _resizeObserver = null
 }

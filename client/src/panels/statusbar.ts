@@ -1,4 +1,5 @@
 import type { FeedState } from '../../../shared/types.js'
+import type { Mode } from '../modes.js'
 import { renderFilterBar } from '../filter.js'
 
 export const INITIAL_FEED_STATES: FeedState[] = [
@@ -68,4 +69,20 @@ export function showFilterModeHint(): void {
 
 export function hideNavModeHint(): void {
   document.getElementById('statusbar-nav-hint')?.classList.add('statusbar__nav-hint--hidden')
+}
+
+const MODE_HINTS: Record<Mode, string> = {
+  DEFAULT:   '[HJKL] NAV',
+  TIMELINE:  'TIMELINE — [ESC] DEFAULT',
+  METRICS:   'METRICS — [ESC] DEFAULT',
+  MINIMAL:   'MINIMAL — [ESC] DEFAULT',
+  WATCHLIST: 'WATCHLIST — [W] PIN/UNPIN — [ESC] DEFAULT',
+  FOCUSED:   'FOCUSED — [M] MAP [W] WATCH [ESC] BACK',
+}
+
+export function showModeHint(mode: Mode): void {
+  const el = document.getElementById('statusbar-nav-hint')
+  if (!el) return
+  el.textContent = MODE_HINTS[mode]
+  el.classList.remove('statusbar__nav-hint--hidden')
 }
